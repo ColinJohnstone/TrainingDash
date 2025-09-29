@@ -6,8 +6,8 @@ import Controls from './components/Controls';
 import FullPlan from './components/FullPlan';
 
 function App() {
-  // Set default date to September 25, 2025 to match the original
-  const [currentDate, setCurrentDate] = useState(new Date('2025-09-25T12:00:00Z'));
+  // Set default date to today's date
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [showFullPlan, setShowFullPlan] = useState(false);
 
   const changeDay = (direction: number) => {
@@ -17,7 +17,7 @@ function App() {
   };
 
   const goToToday = () => {
-    setCurrentDate(new Date('2025-09-25T12:00:00Z'));
+    setCurrentDate(new Date());
   };
 
   const togglePlan = () => {
