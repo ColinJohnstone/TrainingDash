@@ -15,13 +15,15 @@ const StatsContainer: React.FC<StatsContainerProps> = ({ currentDate }) => {
   // Find next race
   const today = new Date(currentDate.setHours(0, 0, 0, 0));
   const nextRace = raceEvents.find(event => {
-    const eventDate = new Date(event.date + 'T12:00:00Z');
+    const eventDate = new Date(event.date);
+    eventDate.setHours(0, 0, 0, 0);
     return eventDate >= today;
   });
 
   let countdownText = "Congratulations on completing your goals!";
   if (nextRace) {
-    const raceDate = new Date(nextRace.date + 'T12:00:00Z');
+    const raceDate = new Date(nextRace.date);
+    raceDate.setHours(0, 0, 0, 0);
     const diffTime = raceDate.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     

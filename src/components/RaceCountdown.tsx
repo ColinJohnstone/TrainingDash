@@ -13,10 +13,13 @@ const RaceCountdown: React.FC<RaceCountdownProps> = ({ currentDate }) => {
     seconds: number;
   } | null>(null);
 
-  // Find next race
-  const today = new Date(currentDate.setHours(0, 0, 0, 0));
+  // Find next race - use current date without modifying the original
+  const today = new Date(currentDate);
+  today.setHours(0, 0, 0, 0);
+  
   const nextRace = raceEvents.find(event => {
-    const eventDate = new Date(event.date + 'T12:00:00Z');
+    const eventDate = new Date(event.date);
+    eventDate.setHours(0, 0, 0, 0);
     return eventDate >= today;
   });
 
@@ -25,7 +28,8 @@ const RaceCountdown: React.FC<RaceCountdownProps> = ({ currentDate }) => {
 
     const updateCountdown = () => {
       const now = new Date();
-      const raceDate = new Date(nextRace.date + 'T12:00:00Z');
+      const raceDate = new Date(nextRace.date);
+      raceDate.setHours(23, 59, 59, 999); // Set to end of race day
       const difference = raceDate.getTime() - now.getTime();
 
       if (difference > 0) {
