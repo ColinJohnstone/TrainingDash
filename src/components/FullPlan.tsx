@@ -48,10 +48,17 @@ const FullPlan: React.FC<FullPlanProps> = ({ isVisible, onDateSelect }) => {
 
   const getWorkoutIcon = (activity: string) => {
     const activityLower = activity.toLowerCase();
+    // Check for brick workouts first (most specific)
+    if (activityLower.includes('brick') || 
+        activityLower.includes('🔀') || 
+        (activityLower.includes('cycle') && activityLower.includes('run')) ||
+        (activityLower.includes('bike') && activityLower.includes('run')) ||
+        activityLower.includes('cycle:') ||
+        activityLower.includes('bike:')) return '🔀';
+    
     if (activityLower.includes('swim') || activityLower.includes('🏊')) return '🏊‍♂️';
     if (activityLower.includes('cycle') || activityLower.includes('bike') || activityLower.includes('🚴')) return '🚴‍♂️';
     if (activityLower.includes('run') || activityLower.includes('🏃')) return '🏃‍♂️';
-    if (activityLower.includes('brick') || activityLower.includes('🔀') || activityLower.includes('cycle:') || activityLower.includes('run:')) return '🔀';
     if (activityLower.includes('rest') || activityLower.includes('✨') || activityLower.includes('recovery') || activityLower.includes('🚶') || activityLower.includes('walk')) return '✨';
     if (activityLower.includes('race') || activityLower.includes('🏁')) return '🏆';
     if (activityLower.includes('travel') || activityLower.includes('✈️')) return '✈️';
@@ -61,10 +68,17 @@ const FullPlan: React.FC<FullPlanProps> = ({ isVisible, onDateSelect }) => {
 
   const getWorkoutColor = (activity: string) => {
     const activityLower = activity.toLowerCase();
+    // Check for brick workouts first (most specific)
+    if (activityLower.includes('brick') || 
+        activityLower.includes('🔀') || 
+        (activityLower.includes('cycle') && activityLower.includes('run')) ||
+        (activityLower.includes('bike') && activityLower.includes('run')) ||
+        activityLower.includes('cycle:') ||
+        activityLower.includes('bike:')) return 'bg-purple-500/20 border-purple-400 text-purple-200';
+    
     if (activityLower.includes('swim') || activityLower.includes('🏊')) return 'bg-blue-500/20 border-blue-400 text-blue-200';
     if (activityLower.includes('cycle') || activityLower.includes('bike') || activityLower.includes('🚴')) return 'bg-green-500/20 border-green-400 text-green-200';
     if (activityLower.includes('run') || activityLower.includes('🏃')) return 'bg-red-500/20 border-red-400 text-red-200';
-    if (activityLower.includes('brick') || activityLower.includes('🔀') || activityLower.includes('cycle:') || activityLower.includes('run:')) return 'bg-purple-500/20 border-purple-400 text-purple-200';
     if (activityLower.includes('rest') || activityLower.includes('✨') || activityLower.includes('recovery') || activityLower.includes('🚶') || activityLower.includes('walk')) return 'bg-gray-500/20 border-gray-400 text-gray-300';
     if (activityLower.includes('race') || activityLower.includes('🏁')) return 'bg-yellow-500/30 border-yellow-400 text-yellow-200';
     return 'bg-indigo-500/20 border-indigo-400 text-indigo-200';
@@ -72,10 +86,17 @@ const FullPlan: React.FC<FullPlanProps> = ({ isVisible, onDateSelect }) => {
 
   const getSportType = (activity: string): SportFilter => {
     const activityLower = activity.toLowerCase();
+    // Check for brick workouts first (most specific)
+    if (activityLower.includes('brick') || 
+        activityLower.includes('🔀') || 
+        (activityLower.includes('cycle') && activityLower.includes('run')) ||
+        (activityLower.includes('bike') && activityLower.includes('run')) ||
+        activityLower.includes('cycle:') ||
+        activityLower.includes('bike:')) return 'brick';
+    
     if (activityLower.includes('swim') || activityLower.includes('🏊')) return 'swim';
     if (activityLower.includes('cycle') || activityLower.includes('bike') || activityLower.includes('🚴')) return 'cycle';
     if (activityLower.includes('run') || activityLower.includes('🏃')) return 'run';
-    if (activityLower.includes('brick') || activityLower.includes('🔀') || activityLower.includes('cycle:') || activityLower.includes('run:')) return 'brick';
     if (activityLower.includes('rest') || activityLower.includes('✨') || activityLower.includes('recovery') || activityLower.includes('🚶') || activityLower.includes('walk')) return 'rest';
     if (activityLower.includes('race') || activityLower.includes('🏁')) return 'race';
     return 'all';
