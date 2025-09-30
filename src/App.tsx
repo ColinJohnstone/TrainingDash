@@ -24,6 +24,11 @@ function App() {
     setShowFullPlan(!showFullPlan);
   };
 
+  const handleDateSelect = (date: Date) => {
+    setCurrentDate(date);
+    // Scroll to top smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 text-gray-100 p-4">
       <div className="max-w-4xl mx-auto">
@@ -35,7 +40,7 @@ function App() {
           onTogglePlan={togglePlan}
           showingPlan={showFullPlan}
         />
-        <FullPlan isVisible={showFullPlan} />
+        <FullPlan isVisible={showFullPlan} onDateSelect={handleDateSelect} />
       </div>
     </div>
   );
