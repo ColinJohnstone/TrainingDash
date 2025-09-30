@@ -18,7 +18,7 @@ interface FullPlanProps {
   onDateSelect: (date: Date) => void;
 }
 
-type SportFilter = 'all' | 'swim' | 'cycle' | 'run' | 'brick' | 'rest' | 'race' | 'walk';
+type SportFilter = 'all' | 'swim' | 'cycle' | 'run' | 'brick' | 'rest' | 'race';
 
 const FullPlan: React.FC<FullPlanProps> = ({ isVisible, onDateSelect }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -51,10 +51,9 @@ const FullPlan: React.FC<FullPlanProps> = ({ isVisible, onDateSelect }) => {
     if (activityLower.includes('swim') || activityLower.includes('🏊')) return '🏊‍♂️';
     if (activityLower.includes('cycle') || activityLower.includes('bike') || activityLower.includes('🚴')) return '🚴‍♂️';
     if (activityLower.includes('run') || activityLower.includes('🏃')) return '🏃‍♂️';
-    if (activityLower.includes('brick') || activityLower.includes('🔀')) return '🔀';
-    if (activityLower.includes('rest') || activityLower.includes('✨')) return '✨';
+    if (activityLower.includes('brick') || activityLower.includes('🔀') || activityLower.includes('cycle:') || activityLower.includes('run:')) return '🔀';
+    if (activityLower.includes('rest') || activityLower.includes('✨') || activityLower.includes('recovery') || activityLower.includes('🚶') || activityLower.includes('walk')) return '✨';
     if (activityLower.includes('race') || activityLower.includes('🏁')) return '🏆';
-    if (activityLower.includes('walk') || activityLower.includes('🚶')) return '🚶‍♂️';
     if (activityLower.includes('travel') || activityLower.includes('✈️')) return '✈️';
     if (activityLower.includes('prep') || activityLower.includes('📋')) return '📋';
     return '💪';
@@ -65,10 +64,9 @@ const FullPlan: React.FC<FullPlanProps> = ({ isVisible, onDateSelect }) => {
     if (activityLower.includes('swim') || activityLower.includes('🏊')) return 'bg-blue-500/20 border-blue-400 text-blue-200';
     if (activityLower.includes('cycle') || activityLower.includes('bike') || activityLower.includes('🚴')) return 'bg-green-500/20 border-green-400 text-green-200';
     if (activityLower.includes('run') || activityLower.includes('🏃')) return 'bg-red-500/20 border-red-400 text-red-200';
-    if (activityLower.includes('brick') || activityLower.includes('🔀')) return 'bg-purple-500/20 border-purple-400 text-purple-200';
-    if (activityLower.includes('rest') || activityLower.includes('✨')) return 'bg-gray-500/20 border-gray-400 text-gray-300';
+    if (activityLower.includes('brick') || activityLower.includes('🔀') || activityLower.includes('cycle:') || activityLower.includes('run:')) return 'bg-purple-500/20 border-purple-400 text-purple-200';
+    if (activityLower.includes('rest') || activityLower.includes('✨') || activityLower.includes('recovery') || activityLower.includes('🚶') || activityLower.includes('walk')) return 'bg-gray-500/20 border-gray-400 text-gray-300';
     if (activityLower.includes('race') || activityLower.includes('🏁')) return 'bg-yellow-500/30 border-yellow-400 text-yellow-200';
-    if (activityLower.includes('walk') || activityLower.includes('🚶')) return 'bg-teal-500/20 border-teal-400 text-teal-200';
     return 'bg-indigo-500/20 border-indigo-400 text-indigo-200';
   };
 
@@ -77,10 +75,9 @@ const FullPlan: React.FC<FullPlanProps> = ({ isVisible, onDateSelect }) => {
     if (activityLower.includes('swim') || activityLower.includes('🏊')) return 'swim';
     if (activityLower.includes('cycle') || activityLower.includes('bike') || activityLower.includes('🚴')) return 'cycle';
     if (activityLower.includes('run') || activityLower.includes('🏃')) return 'run';
-    if (activityLower.includes('brick') || activityLower.includes('🔀')) return 'brick';
-    if (activityLower.includes('rest') || activityLower.includes('✨')) return 'rest';
+    if (activityLower.includes('brick') || activityLower.includes('🔀') || activityLower.includes('cycle:') || activityLower.includes('run:')) return 'brick';
+    if (activityLower.includes('rest') || activityLower.includes('✨') || activityLower.includes('recovery') || activityLower.includes('🚶') || activityLower.includes('walk')) return 'rest';
     if (activityLower.includes('race') || activityLower.includes('🏁')) return 'race';
-    if (activityLower.includes('walk') || activityLower.includes('🚶')) return 'walk';
     return 'all';
   };
 
@@ -233,18 +230,7 @@ const FullPlan: React.FC<FullPlanProps> = ({ isVisible, onDateSelect }) => {
             }`}
           >
             <div className="w-4 h-4 bg-gray-500/20 border border-gray-400 rounded"></div>
-            <span className="text-gray-300">✨ Rest</span>
-          </button>
-          <button
-            onClick={() => handleSportFilterClick('walk')}
-            className={`flex items-center gap-2 p-2 rounded transition-all duration-200 ${
-              sportFilter === 'walk' 
-                ? 'bg-teal-500/30 border-2 border-teal-400' 
-                : 'hover:bg-teal-500/10 border border-teal-400/30'
-            }`}
-          >
-            <div className="w-4 h-4 bg-teal-500/20 border border-teal-400 rounded"></div>
-            <span className="text-teal-200">🚶‍♂️ Recovery</span>
+            <span className="text-gray-300">✨ Rest/Recovery</span>
           </button>
           <button
             onClick={() => setSportFilter('all')}
