@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from './components/Header';
+import RaceCountdown from './components/RaceCountdown';
 import StatsContainer from './components/StatsContainer';
 import DailyView from './components/DailyView';
 import Controls from './components/Controls';
@@ -32,7 +33,14 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 text-gray-100 p-4">
       <div className="max-w-4xl mx-auto">
-        <Header />
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-8">
+          <div className="lg:w-64">
+            <RaceCountdown currentDate={currentDate} />
+          </div>
+          <div className="flex-1">
+            <Header />
+          </div>
+        </div>
         <StatsContainer currentDate={currentDate} />
         <DailyView currentDate={currentDate} onChangeDay={changeDay} />
         <Controls 
