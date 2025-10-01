@@ -14,13 +14,12 @@ interface WeekData {
 }
 
 interface FullPlanProps {
-  isVisible: boolean;
   onDateSelect: (date: Date) => void;
 }
 
 type SportFilter = 'all' | 'swim' | 'cycle' | 'run' | 'brick' | 'rest' | 'race';
 
-const FullPlan: React.FC<FullPlanProps> = ({ isVisible, onDateSelect }) => {
+const FullPlan: React.FC<FullPlanProps> = ({ onDateSelect }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [weeks, setWeeks] = useState<WeekData>({});
   const [sportFilter, setSportFilter] = useState<SportFilter>('all');
@@ -170,8 +169,6 @@ const FullPlan: React.FC<FullPlanProps> = ({ isVisible, onDateSelect }) => {
   const handleSportFilterClick = (sport: SportFilter) => {
     setSportFilter(sportFilter === sport ? 'all' : sport);
   };
-
-  if (!isVisible) return null;
 
   const days = getDaysInMonth(currentMonth);
   const monthName = currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });

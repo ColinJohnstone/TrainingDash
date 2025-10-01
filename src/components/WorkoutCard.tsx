@@ -1,6 +1,6 @@
 import React from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { trainingPlan } from '../data/trainingPlan';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface WorkoutCardProps {
   date: Date;
@@ -9,6 +9,7 @@ interface WorkoutCardProps {
 }
 
 const WorkoutCard: React.FC<WorkoutCardProps> = ({ date, variant, onClick }) => {
+  const [showDetails, setShowDetails] = React.useState(false);
   const dateString = date.toISOString().split('T')[0];
   const workout = trainingPlan[dateString];
   
@@ -68,11 +69,22 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ date, variant, onClick }) => 
           <div className={`${variant === 'center' ? 'text-xl' : 'text-base'} font-bold mb-3 text-white leading-tight`}>
             {workout.activity}
           </div>
-          {workout.details && variant === 'center' && (
-            <div 
-              className="text-left text-sm leading-relaxed text-gray-300 mt-4"
-              dangerouslySetInnerHTML={formatDetails(workout.details)}
-            />
+          {variant === 'center' && workout.details && (
+            <>
+              <button
+                onClick={() => setShowDetails(!showDetails)}
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 mx-auto mb-3"
+              >
+                {showDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                {showDetails ? 'Hide Details' : 'Show Details'}
+              </button>
+              {showDetails && (
+                <div 
+                  className="text-left text-sm leading-relaxed text-gray-300 mt-4 bg-gray-900/50 rounded-lg p-4 border border-gray-600"
+                  dangerouslySetInnerHTML={formatDetails(workout.details)}
+                />
+              )}
+            </>
           )}
           {workout.type === 'race' && variant === 'center' && (
             <div className="mt-4 px-3 py-1 bg-yellow-600 text-yellow-100 rounded-full text-xs font-semibold inline-block">

@@ -1,28 +1,19 @@
 import React, { useState } from 'react';
+import { Calendar } from 'lucide-react';
 import Header from './components/Header';
 import RaceCountdown from './components/RaceCountdown';
 import StatsContainer from './components/StatsContainer';
 import DailyView from './components/DailyView';
-import Controls from './components/Controls';
 import FullPlan from './components/FullPlan';
 
 function App() {
   // Set default date to today's date
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [showFullPlan, setShowFullPlan] = useState(false);
 
   const changeDay = (direction: number) => {
     const newDate = new Date(currentDate);
     newDate.setDate(currentDate.getDate() + direction);
     setCurrentDate(newDate);
-  };
-
-  const goToToday = () => {
-    setCurrentDate(new Date());
-  };
-
-  const togglePlan = () => {
-    setShowFullPlan(!showFullPlan);
   };
 
   const handleDateSelect = (date: Date) => {
@@ -43,12 +34,24 @@ function App() {
         </div>
         <StatsContainer currentDate={currentDate} />
         <DailyView currentDate={currentDate} onChangeDay={changeDay} />
-        <Controls 
-          onGoToToday={goToToday} 
-          onTogglePlan={togglePlan}
-          showingPlan={showFullPlan}
+        <div className="flex justify-center mb-8">
+          <button 
+            onClick={() => setCurrentDate(new Date())}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl border border-blue-500 hover:border-blue-400"
+          >
+            <Calendar size={18} />
+            Go to Today
+          </button>
+        </div>
+        <FullPlan onDateSelect={handleDateSelect} />
+      </div>
+    </div>
+  );
+}
+
+export default App;
         />
-        <FullPlan isVisible={showFullPlan} onDateSelect={handleDateSelect} />
+        <FullPlan onDateSelect={handleDateSelect} />
       </div>
     </div>
   );
