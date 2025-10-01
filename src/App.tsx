@@ -5,6 +5,8 @@ import RaceCountdown from './components/RaceCountdown';
 import StatsContainer from './components/StatsContainer';
 import DailyView from './components/DailyView';
 import FullPlan from './components/FullPlan';
+import StravaLastWorkout from './components/StravaLastWorkout';
+import StravaStats from './components/StravaStats';
 
 function App() {
   // Set default date to today's date
@@ -24,15 +26,27 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 text-gray-100 p-4">
       <div className="max-w-4xl mx-auto">
-        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-8">
-          <div className="lg:w-64">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
+          <div>
             <RaceCountdown currentDate={currentDate} />
           </div>
-          <div className="flex-1">
+          <div>
             <Header />
           </div>
+          <div>
+            <StravaLastWorkout />
+          </div>
         </div>
-        <StatsContainer currentDate={currentDate} />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+          <div>
+            <StravaStats />
+          </div>
+          <div>
+            <StatsContainer currentDate={currentDate} />
+          </div>
+        </div>
+        
         <DailyView currentDate={currentDate} onChangeDay={changeDay} />
         <div className="flex justify-center mb-8">
           <button 
