@@ -1,14 +1,15 @@
 import React from 'react';
-import { ChevronDown, ChevronUp, ChevronLeft } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
 import { trainingPlan } from '../data/trainingPlan';
 
 interface WorkoutCardProps {
   date: Date;
   variant: 'center' | 'adjacent';
+  isNext?: boolean;
   onClick?: () => void;
 }
 
-const WorkoutCard: React.FC<WorkoutCardProps> = ({ date, variant, onClick }) => {
+const WorkoutCard: React.FC<WorkoutCardProps> = ({ date, variant, isNext, onClick }) => {
   const [showDetails, setShowDetails] = React.useState(false);
   const dateString = date.toISOString().split('T')[0];
   const workout = trainingPlan[dateString];
@@ -51,7 +52,11 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ date, variant, onClick }) => 
         <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-200 bg-black/20 rounded-xl">
           {onClick && (
             <div className="text-white">
-              <ChevronLeft size={24} className="mx-auto" />
+              {isNext ? (
+                <ChevronRight size={24} className="mx-auto" />
+              ) : (
+                <ChevronLeft size={24} className="mx-auto" />
+              )}
             </div>
           )}
         </div>

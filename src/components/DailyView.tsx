@@ -82,6 +82,7 @@ const DailyView: React.FC<DailyViewProps> = ({ currentDate, onChangeDay }) => {
           <WorkoutCard 
             date={getNextDate()} 
             variant="adjacent" 
+            isNext={true}
             onClick={() => onChangeDay(1)} 
           />
         </div>
@@ -107,6 +108,7 @@ const DailyView: React.FC<DailyViewProps> = ({ currentDate, onChangeDay }) => {
         <WorkoutCard 
           date={getNextDate()} 
           variant="adjacent" 
+          isNext={true}
           onClick={() => onChangeDay(1)} 
         />
         </div>
