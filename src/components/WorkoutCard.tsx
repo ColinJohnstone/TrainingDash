@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronLeft } from 'lucide-react';
 import { trainingPlan } from '../data/trainingPlan';
 
 interface WorkoutCardProps {
