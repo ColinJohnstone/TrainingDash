@@ -28,7 +28,7 @@ const WeatherForecast: React.FC = () => {
         const mockData: WeatherData[] = [];
         
         const conditions = ['sunny', 'cloudy', 'rainy', 'windy'];
-        const baseTemp = 65 + Math.random() * 20; // 65-85°F base
+        const baseTemp = 18 + Math.random() * 12; // 18-30°C base for Aurora, Ontario
         
         for (let i = 0; i < 6; i++) {
           const time = new Date(now.getTime() + i * 60 * 60 * 1000);
@@ -37,7 +37,7 @@ const WeatherForecast: React.FC = () => {
               hour: 'numeric', 
               hour12: true 
             }),
-            temperature: Math.round(baseTemp + (Math.random() - 0.5) * 10),
+            temperature: Math.round(baseTemp + (Math.random() - 0.5) * 8),
             condition: conditions[Math.floor(Math.random() * conditions.length)],
             windSpeed: Math.round(5 + Math.random() * 15),
             humidity: Math.round(40 + Math.random() * 40)
@@ -127,7 +127,7 @@ const WeatherForecast: React.FC = () => {
               {getWeatherIcon(hour.condition)}
             </div>
             <div className="text-sm font-semibold text-white mb-1">
-              {hour.temperature}°
+              {hour.temperature}°C
             </div>
             <div className="text-xs text-gray-500">
               {hour.windSpeed}mph
@@ -137,7 +137,7 @@ const WeatherForecast: React.FC = () => {
       </div>
       
       <div className="text-xs text-gray-500 text-center mt-2">
-        Perfect training weather ahead! 🏃‍♂️
+        Aurora, ON - Perfect training weather ahead! 🏃‍♂️
       </div>
     </div>
   );

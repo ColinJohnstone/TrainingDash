@@ -64,6 +64,29 @@ const DailyView: React.FC<DailyViewProps> = ({ currentDate, onChangeDay }) => {
         </button>
       </div>
       
+      {/* Desktop view with adjacent cards */}
+      <div className="hidden md:flex items-center justify-center gap-4 mb-6">
+        <div className="flex-1 max-w-xs">
+          <WorkoutCard 
+            date={getPrevDate()} 
+            variant="adjacent" 
+            onClick={() => onChangeDay(-1)} 
+          />
+        </div>
+        
+        <div className="flex-1 max-w-2xl">
+          <WorkoutCard date={currentDate} variant="center" />
+        </div>
+        
+        <div className="flex-1 max-w-xs">
+          <WorkoutCard 
+            date={getNextDate()} 
+            variant="adjacent" 
+            onClick={() => onChangeDay(1)} 
+          />
+        </div>
+      </div>
+      
       {/* Three-card view for mobile */}
       <div 
         className="md:hidden flex items-center justify-center gap-2 select-none"
