@@ -34,16 +34,16 @@ function App() {
             <Header />
           </div>
           <div>
-            <StravaLastWorkout />
+            <StatsContainer currentDate={currentDate} />
           </div>
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
           <div>
-            <StravaStats />
+            <StravaLastWorkout />
           </div>
           <div>
-            <StatsContainer currentDate={currentDate} />
+            <StravaStats />
           </div>
         </div>
         
