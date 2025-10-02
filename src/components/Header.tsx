@@ -1,6 +1,5 @@
 import React from 'react';
 import { Activity } from 'lucide-react';
-import WeatherForecast from './WeatherForecast';
 
 const Header: React.FC = () => {
   return (
@@ -12,7 +11,6 @@ const Header: React.FC = () => {
             Colin's Training Dashboard
           </h1>
         </div>
-        <WeatherForecast />
       </div>
     </header>
   );
