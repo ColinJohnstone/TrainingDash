@@ -125,7 +125,7 @@ const StravaStats: React.FC = () => {
   );
 
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-xl border border-gray-700">
+    <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-xl border border-gray-700 h-full flex flex-col justify-center">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <TrendingUp size={24} className="text-blue-400" />

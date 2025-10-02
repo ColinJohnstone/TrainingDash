@@ -35,7 +35,7 @@ const StatsContainer: React.FC<StatsContainerProps> = ({ currentDate }) => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 mb-8 shadow-xl border border-gray-700">
+    <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-xl border border-gray-700 h-full flex flex-col justify-center">
       <div className="mb-6">
         <div className="flex items-center justify-between text-sm text-gray-300 mb-3">
           <div className="flex items-center gap-2">
