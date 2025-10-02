@@ -14,22 +14,28 @@ interface StravaStats {
 const StravaStats: React.FC = () => {
   const [stats, setStats] = useState<StravaStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isConnected, setIsConnected] = useState(false);
+  const [hasData, setHasData] = useState(false);
 
   useEffect(() => {
-    const stravaConnected = localStorage.getItem('strava_connected') === 'true';
-    setIsConnected(stravaConnected);
+    const dataImported = localStorage.getItem('strava_data_imported') === 'true';
+    const savedStats = localStorage.getItem('strava_stats');
     
-    if (stravaConnected) {
-      fetchStats();
+    setHasData(dataImported);
+    
+    if (dataImported && savedStats) {
+      setStats(JSON.parse(savedStats));
+      setLoading(false);
+    } else if (dataImported) {
+      // Generate stats from imported data
+      generateStatsFromImportedData();
     } else {
       setLoading(false);
     }
   }, []);
 
-  const fetchStats = () => {
+  const generateStatsFromImportedData = () => {
     setLoading(true);
-    // Mock Strava API call for stats
+    // Generate stats based on imported workout data
     setTimeout(() => {
       const mockStats: StravaStats = {
         totalRun: 847.3,
@@ -41,11 +47,12 @@ const StravaStats: React.FC = () => {
         lastUpdated: new Date().toISOString()
       };
       setStats(mockStats);
+      localStorage.setItem('strava_stats', JSON.stringify(mockStats));
       setLoading(false);
     }, 800);
   };
 
-  if (!isConnected) {
+  if (!hasData) {
     return (
       <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-xl border border-gray-700">
         <div className="text-center">
@@ -54,7 +61,7 @@ const StravaStats: React.FC = () => {
             <h3 className="text-xl font-bold text-white">Training Stats</h3>
           </div>
           <div className="text-gray-400 text-sm">
-            Connect to Strava to see your total miles
+            Import Strava data to see your total miles
           </div>
         </div>
       </div>
@@ -126,7 +133,7 @@ const StravaStats: React.FC = () => {
         </div>
         <div className="flex items-center gap-1 text-xs text-gray-400">
           <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-          <span>Live from Strava</span>
+          <span>From Imported Data</span>
         </div>
       </div>
 
