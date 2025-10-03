@@ -314,15 +314,13 @@ const FullPlan: React.FC<FullPlanProps> = ({ onDateSelect }) => {
             >
               {date && (
                 <>
-                  {workout && getSportType(workout.activity) !== 'rest' && (
-                    <div className={`text-xs font-medium mb-1 ${isToday ? 'text-blue-400' : 'text-gray-300'}`}>
-                      {date.getDate()}
-                    </div>
-                  )}
+                  <div className={`text-xs font-medium mb-1 ${isToday ? 'text-blue-400' : 'text-gray-300'}`}>
+                    {date.getDate()}
+                  </div>
                   {workout && (
                     <div className={`text-xs p-1 rounded border ${getWorkoutColor(workout.activity)} text-center leading-tight ${
                       shouldShow ? 'hover:scale-105 transition-transform duration-200' : ''
-                    } ${getSportType(workout.activity) === 'rest' ? 'flex items-center justify-center h-full' : ''}`}>
+                    }`}>
                       <div className="text-sm mb-1">{getWorkoutIcon(workout.activity)}</div>
                       {getSportType(workout.activity) !== 'rest' && (
                         <>
@@ -332,11 +330,6 @@ const FullPlan: React.FC<FullPlanProps> = ({ onDateSelect }) => {
                           )}
                         </>
                       )}
-                    </div>
-                  )}
-                  {!workout && (
-                    <div className={`text-xs font-medium mb-1 ${isToday ? 'text-blue-400' : 'text-gray-300'}`}>
-                      {date.getDate()}
                     </div>
                   )}
                 </>
