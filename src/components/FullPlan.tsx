@@ -322,13 +322,9 @@ const FullPlan: React.FC<FullPlanProps> = ({ onDateSelect }) => {
                       shouldShow ? 'hover:scale-105 transition-transform duration-200' : ''
                     }`}>
                       <div className="text-sm mb-1">{getWorkoutIcon(workout.activity)}</div>
-                      {getSportType(workout.activity) !== 'rest' && (
-                        <>
-                          <div className="font-medium">{extractDistance(workout.activity)}</div>
-                          {workout.type === 'race' && (
-                            <div className="text-xs font-bold mt-1">RACE</div>
-                          )}
-                        </>
+                      <div className="font-medium">{getSportType(workout.activity) !== 'rest' ? extractDistance(workout.activity) : ''}</div>
+                      {workout.type === 'race' && (
+                        <div className="text-xs font-bold mt-1">RACE</div>
                       )}
                     </div>
                   )}
