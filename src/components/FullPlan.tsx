@@ -314,18 +314,29 @@ const FullPlan: React.FC<FullPlanProps> = ({ onDateSelect }) => {
             >
               {date && (
                 <>
-                  <div className={`text-xs font-medium mb-1 ${isToday ? 'text-blue-400' : 'text-gray-300'}`}>
-                    {date.getDate()}
-                  </div>
+                  {workout && getSportType(workout.activity) !== 'rest' && (
+                    <div className={`text-xs font-medium mb-1 ${isToday ? 'text-blue-400' : 'text-gray-300'}`}>
+                      {date.getDate()}
+                    </div>
+                  )}
                   {workout && (
                     <div className={`text-xs p-1 rounded border ${getWorkoutColor(workout.activity)} text-center leading-tight ${
                       shouldShow ? 'hover:scale-105 transition-transform duration-200' : ''
-                    }`}>
+                    } ${getSportType(workout.activity) === 'rest' ? 'flex items-center justify-center h-full' : ''}`}>
                       <div className="text-sm mb-1">{getWorkoutIcon(workout.activity)}</div>
-                      <div className="font-medium">{extractDistance(workout.activity)}</div>
-                      {workout.type === 'race' && (
-                        <div className="text-xs font-bold mt-1">RACE</div>
+                      {getSportType(workout.activity) !== 'rest' && (
+                        <>
+                          <div className="font-medium">{extractDistance(workout.activity)}</div>
+                          {workout.type === 'race' && (
+                            <div className="text-xs font-bold mt-1">RACE</div>
+                          )}
+                        </>
                       )}
+                    </div>
+                  )}
+                  {!workout && (
+                    <div className={`text-xs font-medium mb-1 ${isToday ? 'text-blue-400' : 'text-gray-300'}`}>
+                      {date.getDate()}
                     </div>
                   )}
                 </>
