@@ -95,9 +95,9 @@ const RaceCountdown: React.FC<RaceCountdownProps> = ({ currentDate }) => {
   const textColor = getTextColor(daysLeft);
 
   return (
-    <div className={`bg-gradient-to-r ${bgColor} rounded-lg p-4 shadow-lg border border-opacity-30 border-white`}>
+    <div className={`bg-gradient-to-r ${bgColor} rounded-lg p-4 shadow-lg border border-opacity-30 border-white transform hover:scale-105 transition-all duration-300 animate-fade-in`}>
       <div className="flex items-center gap-3">
-        <span className="text-2xl animate-pulse">{emoji}</span>
+        <span className="text-2xl animate-bounce">{emoji}</span>
         <div>
           <div className={`${textColor} font-bold text-sm leading-tight`}>
             {nextRace.name}

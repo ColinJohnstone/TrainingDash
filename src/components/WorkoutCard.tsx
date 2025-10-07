@@ -15,12 +15,12 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ date, variant, isNext, onClic
   const workout = trainingPlan[dateString];
   
   const getCardClasses = () => {
-    let baseClasses = "bg-gray-800 border border-gray-600 rounded-xl p-4 text-center shadow-xl transition-all duration-300 flex flex-col justify-center relative";
-    
+    let baseClasses = "bg-gray-800 border border-gray-600 rounded-xl p-4 text-center shadow-xl transition-all duration-500 ease-out flex flex-col justify-center relative";
+
     if (variant === 'adjacent') {
-      baseClasses += " transform scale-85 opacity-60 cursor-pointer hover:opacity-80 hover:scale-90 h-64 overflow-hidden";
+      baseClasses += " transform scale-85 opacity-60 cursor-pointer hover:opacity-90 hover:scale-95 hover:shadow-2xl h-64 overflow-hidden";
     } else {
-      baseClasses += " border-2 border-blue-500 transform scale-100 opacity-100 min-h-80";
+      baseClasses += " border-2 border-blue-500 transform scale-100 opacity-100 min-h-80 animate-fade-in";
     }
     
     if (workout?.type === 'race') {
@@ -49,13 +49,13 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ date, variant, isNext, onClic
   return (
     <div className={getCardClasses()} onClick={onClick}>
       {variant === 'adjacent' && (
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-200 bg-black/20 rounded-xl">
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-all duration-300 bg-black/30 rounded-xl backdrop-blur-sm">
           {onClick && (
-            <div className="text-white">
+            <div className="text-white transform hover:scale-110 transition-transform duration-200">
               {isNext ? (
-                <ChevronRight size={24} className="mx-auto" />
+                <ChevronRight size={32} className="mx-auto animate-pulse" />
               ) : (
-                <ChevronLeft size={24} className="mx-auto" />
+                <ChevronLeft size={32} className="mx-auto animate-pulse" />
               )}
             </div>
           )}
@@ -78,14 +78,14 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ date, variant, isNext, onClic
             <>
               <button
                 onClick={() => setShowDetails(!showDetails)}
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 mx-auto mb-3"
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:scale-105 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 mx-auto mb-3"
               >
                 {showDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 {showDetails ? 'Hide Details' : 'Show Details'}
               </button>
               {showDetails && (
-                <div 
-                  className="text-left text-sm leading-relaxed text-gray-300 mt-4 bg-gray-900/50 rounded-lg p-4 border border-gray-600"
+                <div
+                  className="text-left text-sm leading-relaxed text-gray-300 mt-4 bg-gray-900/50 rounded-lg p-4 border border-gray-600 animate-slide-down"
                   dangerouslySetInnerHTML={formatDetails(workout.details)}
                 />
               )}

@@ -29,7 +29,7 @@ function App() {
       <div className="fixed top-4 left-4 z-50">
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-lg shadow-xl border border-gray-600 transition-all duration-200"
+          className="bg-gray-800 hover:bg-gray-700 hover:scale-110 text-white p-3 rounded-lg shadow-xl border border-gray-600 transition-all duration-300 hover:shadow-2xl"
         >
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -37,9 +37,9 @@ function App() {
 
       {/* Menu Overlay */}
       {menuOpen && (
-        <div className="fixed inset-0 bg-black/50 z-40" onClick={() => setMenuOpen(false)}>
+        <div className="fixed inset-0 bg-black/50 z-40 animate-fade-in" onClick={() => setMenuOpen(false)}>
           <div
-            className="fixed left-0 top-0 h-full w-64 bg-gray-800 shadow-2xl border-r border-gray-700 p-6 transform transition-transform duration-300"
+            className="fixed left-0 top-0 h-full w-64 bg-gray-800 shadow-2xl border-r border-gray-700 p-6 transform transition-all duration-300 animate-slide-in-left"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-2xl font-bold text-white mb-6 mt-16">Menu</h2>
@@ -76,14 +76,14 @@ function App() {
       )}
 
       {/* Page Content */}
-      <div className="p-4">
+      <div className="p-4 pt-20 md:pt-4">
         {currentPage === 'training' ? (
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
-              <div>
+              <div className="order-2 lg:order-1">
                 <RaceCountdown currentDate={currentDate} />
               </div>
-              <div>
+              <div className="order-1 lg:order-2">
                 <Header />
               </div>
             </div>
@@ -96,7 +96,7 @@ function App() {
             <div className="flex justify-center mb-8">
               <button
                 onClick={() => setCurrentDate(new Date())}
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl border border-blue-500 hover:border-blue-400"
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 hover:scale-105 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-2xl border border-blue-500 hover:border-blue-400"
               >
                 <Calendar size={18} />
                 Go to Today

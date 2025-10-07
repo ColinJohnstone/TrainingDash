@@ -80,6 +80,8 @@ const FullPlan: React.FC<FullPlanProps> = ({ onDateSelect }) => {
     if (activityLower.includes('run') || activityLower.includes('🏃')) return 'bg-red-500/20 border-red-400 text-red-200';
     if (activityLower.includes('rest') || activityLower.includes('✨') || activityLower.includes('recovery') || activityLower.includes('🚶') || activityLower.includes('walk')) return 'bg-gray-500/20 border-gray-400 text-gray-300';
     if (activityLower.includes('race') || activityLower.includes('🏁')) return 'bg-yellow-500/30 border-yellow-400 text-yellow-200';
+    if (activityLower.includes('travel') || activityLower.includes('✈️')) return 'bg-sky-500/20 border-sky-400 text-sky-200';
+    if (activityLower.includes('prep') || activityLower.includes('📋')) return 'bg-orange-500/20 border-orange-400 text-orange-200';
     return 'bg-indigo-500/20 border-indigo-400 text-indigo-200';
   };
 
@@ -98,6 +100,8 @@ const FullPlan: React.FC<FullPlanProps> = ({ onDateSelect }) => {
     if (activityLower.includes('run') || activityLower.includes('🏃')) return 'run';
     if (activityLower.includes('rest') || activityLower.includes('✨') || activityLower.includes('recovery') || activityLower.includes('🚶') || activityLower.includes('walk')) return 'rest';
     if (activityLower.includes('race') || activityLower.includes('🏁')) return 'race';
+    if (activityLower.includes('travel') || activityLower.includes('✈️')) return 'rest';
+    if (activityLower.includes('prep') || activityLower.includes('📋')) return 'rest';
     return 'all';
   };
 
@@ -308,7 +312,7 @@ const FullPlan: React.FC<FullPlanProps> = ({ onDateSelect }) => {
               className={`min-h-[80px] p-1 border border-gray-700 ${
                 date ? 'bg-gray-800/50' : 'bg-gray-900/30'
               } ${isToday ? 'ring-2 ring-blue-400' : ''} ${
-                shouldShow ? 'cursor-pointer hover:bg-gray-700/50 transition-colors duration-200' : ''
+                shouldShow ? 'cursor-pointer hover:bg-gray-700/50 hover:shadow-lg hover:scale-105 transition-all duration-300' : ''
               } ${isFiltered ? 'opacity-30' : ''}`}
               onClick={() => date && handleDateClick(date)}
             >
@@ -319,10 +323,19 @@ const FullPlan: React.FC<FullPlanProps> = ({ onDateSelect }) => {
                   </div>
                   {workout && (
                     <div className={`text-xs p-1 rounded border ${getWorkoutColor(workout.activity)} text-center leading-tight ${
-                      shouldShow ? 'hover:scale-105 transition-transform duration-200' : ''
+                      shouldShow ? 'hover:scale-110 hover:shadow-md transition-all duration-300' : ''
                     }`}>
                       <div className="text-sm mb-1">{getWorkoutIcon(workout.activity)}</div>
-                      <div className="font-medium">{getSportType(workout.activity) !== 'rest' ? extractDistance(workout.activity) : 'Rest'}</div>
+                      <div className="font-medium">
+                        {getSportType(workout.activity) === 'rest'
+                          ? (workout.activity.toLowerCase().includes('travel')
+                              ? 'Travel'
+                              : workout.activity.toLowerCase().includes('prep')
+                                ? 'Prep'
+                                : 'Rest')
+                          : extractDistance(workout.activity)
+                        }
+                      </div>
                       {workout.type === 'race' && (
                         <div className="text-xs font-bold mt-1">RACE</div>
                       )}
