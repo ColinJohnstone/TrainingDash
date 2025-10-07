@@ -126,7 +126,7 @@ const StatsContainer: React.FC<StatsContainerProps> = ({ currentDate }) => {
       <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-600">
         <div className="flex items-center justify-center gap-2 mb-3">
           <Activity size={18} className="text-blue-400" />
-          <h3 className="text-sm font-semibold text-gray-300">Distance Completed</h3>
+          <h3 className="text-sm font-semibold text-gray-300">Plan Distance Completed</h3>
         </div>
         <div className="grid grid-cols-3 gap-3">
           <div className="text-center">
