@@ -7,6 +7,7 @@
 //   KV_REST_API_TOKEN  (or UPSTASH_REDIS_REST_TOKEN)
 
 import { Redis } from '@upstash/redis';
+import { isAuthed, unauthorized } from '../lib/auth';
 
 export const config = { runtime: 'edge' };
 
@@ -58,6 +59,7 @@ async function loadRaces(redis: Redis): Promise<Race[]> {
 }
 
 export default async function handler(req: Request): Promise<Response> {
+  if (!(await isAuthed(req))) return unauthorized();
   if (!configured()) return json({ error: 'not_configured' }, 503);
 
   const redis = new Redis({ url: url(), token: token() });

@@ -10,6 +10,8 @@
 //
 // See STRAVA_SETUP.md for how to obtain these.
 
+import { isAuthed, unauthorized } from '../lib/auth';
+
 export const config = { runtime: 'edge' };
 
 const METERS_PER_MILE = 1609.34;
@@ -86,7 +88,8 @@ function pacePerMile(distanceMeters: number, timeSeconds: number): string | unde
   return `${m}:${s.toString().padStart(2, '0')}/mi`;
 }
 
-export default async function handler(): Promise<Response> {
+export default async function handler(req: Request): Promise<Response> {
+  if (!(await isAuthed(req))) return unauthorized();
   if (!process.env.STRAVA_REFRESH_TOKEN) {
     return json({ error: 'not_configured' }, 503);
   }
