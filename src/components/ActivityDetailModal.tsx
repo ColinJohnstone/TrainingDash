@@ -105,7 +105,14 @@ const ActivityDetailModal: React.FC<Props> = ({ activity, onClose }) => {
           </div>
 
           {/* Route */}
-          {polyline && <RouteMap polyline={polyline} color={color.hex} />}
+          {polyline ? (
+            <RouteMap polyline={polyline} color={color.hex} />
+          ) : !loading ? (
+            <div className="flex items-center justify-center gap-2 h-20 rounded-lg bg-gray-900/40 border border-dashed border-gray-700 text-xs text-gray-500">
+              <MapPin size={14} />
+              No GPS route recorded (indoor / treadmill activity)
+            </div>
+          ) : null}
 
           {/* Description */}
           {detail?.description && (
