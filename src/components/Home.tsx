@@ -9,7 +9,7 @@ import { useRaces } from '../data/races';
 import { useStravaData } from '../data/strava';
 
 const Home: React.FC = () => {
-  const { races, loading: racesLoading, error: racesError, add, remove } = useRaces();
+  const { races, loading: racesLoading, error: racesError, add, edit, remove } = useRaces();
   const { data, loading: stravaLoading, reload: reloadStrava } = useStravaData();
 
   return (
@@ -40,6 +40,7 @@ const Home: React.FC = () => {
         loading={racesLoading}
         error={racesError}
         onAdd={add}
+        onEdit={edit}
         onDelete={remove}
       />
     </div>

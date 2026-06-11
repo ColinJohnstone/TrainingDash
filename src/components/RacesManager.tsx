@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, MapPin, Calendar, AlertCircle, X, Flag } from 'lucide-react';
+import { Plus, Trash2, Pencil, MapPin, Calendar, AlertCircle, X, Flag } from 'lucide-react';
 import { Race, RaceInput, RaceError } from '../data/races';
 
 interface Props {
@@ -7,10 +7,13 @@ interface Props {
   loading: boolean;
   error: RaceError | null;
   onAdd: (input: RaceInput) => Promise<void>;
+  onEdit: (race: Race) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
 }
 
 const RACE_TYPES = ['Triathlon', 'Run', 'Ride', 'Swim', 'Duathlon', 'Other'];
+
+const EMPTY: RaceInput = { name: '', date: '', type: 'Triathlon', location: '', distance: '' };
 
 const typeColor = (type?: string) => {
   switch ((type || '').toLowerCase()) {
@@ -36,10 +39,11 @@ const daysBetween = (dateStr: string) => {
   return Math.round((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 };
 
-const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onDelete }) => {
+const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onEdit, onDelete }) => {
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState<RaceInput>({ name: '', date: '', type: 'Triathlon', location: '', distance: '' });
+  const [form, setForm] = useState<RaceInput>(EMPTY);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -47,20 +51,52 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onDelete 
   const upcoming = sorted.filter((r) => new Date(r.date) >= today);
   const past = sorted.filter((r) => new Date(r.date) < today).reverse();
 
+  const closeForm = () => {
+    setShowForm(false);
+    setEditingId(null);
+    setForm(EMPTY);
+  };
+
+  const startAdd = () => {
+    if (showForm && !editingId) {
+      closeForm();
+      return;
+    }
+    setEditingId(null);
+    setForm(EMPTY);
+    setShowForm(true);
+  };
+
+  const startEdit = (race: Race) => {
+    setEditingId(race.id);
+    setForm({
+      name: race.name,
+      date: race.date,
+      type: race.type || 'Other',
+      location: race.location || '',
+      distance: race.distance || '',
+    });
+    setShowForm(true);
+  };
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.date) return;
     setSubmitting(true);
+    const payload = {
+      name: form.name.trim(),
+      date: form.date,
+      type: form.type,
+      location: form.location?.trim() || undefined,
+      distance: form.distance?.trim() || undefined,
+    };
     try {
-      await onAdd({
-        name: form.name.trim(),
-        date: form.date,
-        type: form.type,
-        location: form.location?.trim() || undefined,
-        distance: form.distance?.trim() || undefined,
-      });
-      setForm({ name: '', date: '', type: 'Triathlon', location: '', distance: '' });
-      setShowForm(false);
+      if (editingId) {
+        await onEdit({ id: editingId, ...payload });
+      } else {
+        await onAdd(payload);
+      }
+      closeForm();
     } catch {
       // Surfaced via the parent's error state on next reload.
     } finally {
@@ -71,7 +107,7 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onDelete 
   const RaceCard = ({ race, isPast }: { race: Race; isPast: boolean }) => {
     const days = daysBetween(race.date);
     return (
-      <div className={`bg-gray-900/40 rounded-lg p-4 border border-gray-700 flex items-start justify-between gap-3 ${isPast ? 'opacity-60' : ''}`}>
+      <div className={`bg-gray-900/40 rounded-lg p-4 border border-gray-700 flex items-start justify-between gap-3 ${isPast ? 'opacity-60' : ''} ${editingId === race.id ? 'ring-1 ring-blue-500/60' : ''}`}>
         <div className="min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h4 className="font-bold text-white truncate">{race.name}</h4>
@@ -98,13 +134,22 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onDelete 
             )}
           </div>
         </div>
-        <button
-          onClick={() => onDelete(race.id)}
-          className="text-gray-500 hover:text-red-400 transition-colors shrink-0 p-1"
-          aria-label={`Delete ${race.name}`}
-        >
-          <Trash2 size={16} />
-        </button>
+        <div className="flex items-center gap-1 shrink-0">
+          <button
+            onClick={() => startEdit(race)}
+            className="text-gray-500 hover:text-blue-400 transition-colors p-1"
+            aria-label={`Edit ${race.name}`}
+          >
+            <Pencil size={15} />
+          </button>
+          <button
+            onClick={() => onDelete(race.id)}
+            className="text-gray-500 hover:text-red-400 transition-colors p-1"
+            aria-label={`Delete ${race.name}`}
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
       </div>
     );
   };
@@ -117,11 +162,11 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onDelete 
           Races
         </h3>
         <button
-          onClick={() => setShowForm((s) => !s)}
+          onClick={startAdd}
           className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 border border-blue-500"
         >
-          {showForm ? <X size={16} /> : <Plus size={16} />}
-          {showForm ? 'Cancel' : 'Add Race'}
+          {showForm && !editingId ? <X size={16} /> : <Plus size={16} />}
+          {showForm && !editingId ? 'Cancel' : 'Add Race'}
         </button>
       </div>
 
@@ -145,6 +190,14 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onDelete 
 
       {showForm && (
         <form onSubmit={submit} className="mb-5 p-4 rounded-lg bg-gray-900/40 border border-gray-700 space-y-3">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold text-white">{editingId ? 'Edit race' : 'New race'}</p>
+            {editingId && (
+              <button type="button" onClick={closeForm} className="text-gray-400 hover:text-white p-1" aria-label="Cancel edit">
+                <X size={16} />
+              </button>
+            )}
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <label className="text-sm text-gray-300">
               Race name *
@@ -205,7 +258,7 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onDelete 
             disabled={submitting}
             className="w-full bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 border border-green-500 flex items-center justify-center gap-2"
           >
-            {submitting ? 'Saving…' : 'Save Race'}
+            {submitting ? 'Saving…' : editingId ? 'Save Changes' : 'Save Race'}
           </button>
         </form>
       )}

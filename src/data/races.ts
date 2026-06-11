@@ -48,6 +48,16 @@ export async function addRace(input: RaceInput): Promise<Race> {
   return data.race;
 }
 
+export async function updateRace(race: Race): Promise<Race> {
+  const res = await fetch('/api/races', {
+    method: 'PUT',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(race),
+  });
+  const data = await parseOrThrow<{ race: Race }>(res);
+  return data.race;
+}
+
 export async function deleteRace(id: string): Promise<void> {
   const res = await fetch(`/api/races?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
   await parseOrThrow<{ ok: boolean }>(res);
@@ -58,6 +68,7 @@ export interface UseRaces {
   loading: boolean;
   error: RaceError | null;
   add: (input: RaceInput) => Promise<void>;
+  edit: (race: Race) => Promise<void>;
   remove: (id: string) => Promise<void>;
   reload: () => void;
 }
@@ -85,10 +96,15 @@ export function useRaces(): UseRaces {
     setRaces((prev) => [...prev, race]);
   }, []);
 
+  const edit = useCallback(async (race: Race) => {
+    const updated = await updateRace(race);
+    setRaces((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
+  }, []);
+
   const remove = useCallback(async (id: string) => {
     await deleteRace(id);
     setRaces((prev) => prev.filter((r) => r.id !== id));
   }, []);
 
-  return { races, loading, error, add, remove, reload };
+  return { races, loading, error, add, edit, remove, reload };
 }
