@@ -1,28 +1,21 @@
-import React, { useState } from 'react';
-import { Calendar, Menu, X } from 'lucide-react';
-import Header from './components/Header';
-import RaceCountdown from './components/RaceCountdown';
-import StatsContainer from './components/StatsContainer';
-import DailyView from './components/DailyView';
-import FullPlan from './components/FullPlan';
+import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
+import Home from './components/Home';
+import TrainingPlanPage from './components/TrainingPlanPage';
 import StravaPage from './components/StravaPage';
 
+type Page = 'home' | 'plan' | 'strava';
+
+const NAV: { id: Page; label: string }[] = [
+  { id: 'home', label: '🏠 Home' },
+  { id: 'strava', label: '📊 Strava Metrics' },
+  { id: 'plan', label: '📋 Training Plan' },
+];
+
 function App() {
-  const [currentPage, setCurrentPage] = useState<'training' | 'strava'>('training');
+  const [currentPage, setCurrentPage] = useState<Page>('home');
   const [menuOpen, setMenuOpen] = useState(false);
-  const [currentDate, setCurrentDate] = useState(new Date());
 
-  const changeDay = (direction: number) => {
-    const newDate = new Date(currentDate);
-    newDate.setDate(currentDate.getDate() + direction);
-    setCurrentDate(newDate);
-  };
-
-  const handleDateSelect = (date: Date) => {
-    setCurrentDate(date);
-    // Scroll to top smoothly
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 text-gray-100">
       {/* Navigation Menu */}
@@ -44,32 +37,22 @@ function App() {
           >
             <h2 className="text-2xl font-bold text-white mb-6 mt-16">Menu</h2>
             <nav className="space-y-2">
-              <button
-                onClick={() => {
-                  setCurrentPage('training');
-                  setMenuOpen(false);
-                }}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 ${
-                  currentPage === 'training'
-                    ? 'bg-blue-600 text-white font-semibold'
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                }`}
-              >
-                🏃 Training Plan
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentPage('strava');
-                  setMenuOpen(false);
-                }}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 ${
-                  currentPage === 'strava'
-                    ? 'bg-blue-600 text-white font-semibold'
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                }`}
-              >
-                📊 Strava Metrics
-              </button>
+              {NAV.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setCurrentPage(item.id);
+                    setMenuOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 ${
+                    currentPage === item.id
+                      ? 'bg-blue-600 text-white font-semibold'
+                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
             </nav>
           </div>
         </div>
@@ -77,36 +60,9 @@ function App() {
 
       {/* Page Content */}
       <div className="p-4 pt-20 md:pt-4">
-        {currentPage === 'training' ? (
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
-              <div className="order-2 lg:order-1">
-                <RaceCountdown currentDate={currentDate} />
-              </div>
-              <div className="order-1 lg:order-2">
-                <Header />
-              </div>
-            </div>
-
-            <div className="mb-8">
-              <StatsContainer currentDate={currentDate} />
-            </div>
-
-            <DailyView currentDate={currentDate} onChangeDay={changeDay} />
-            <div className="flex justify-center mb-8">
-              <button
-                onClick={() => setCurrentDate(new Date())}
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 hover:scale-105 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-2xl border border-blue-500 hover:border-blue-400"
-              >
-                <Calendar size={18} />
-                Go to Today
-              </button>
-            </div>
-            <FullPlan onDateSelect={handleDateSelect} />
-          </div>
-        ) : (
-          <StravaPage />
-        )}
+        {currentPage === 'home' && <Home />}
+        {currentPage === 'plan' && <TrainingPlanPage />}
+        {currentPage === 'strava' && <StravaPage />}
       </div>
     </div>
   );

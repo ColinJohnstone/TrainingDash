@@ -2,6 +2,8 @@
 // Fetches from the /api/activities serverless function (which holds the
 // secrets). The browser never sees any Strava credentials.
 
+import { useCallback, useEffect, useState } from 'react';
+
 export interface StravaWorkout {
   id: string;
   name: string;
@@ -58,4 +60,32 @@ export async function fetchStravaData(): Promise<StravaPayload> {
     throw (data.error === 'not_configured' ? 'not_configured' : 'request_failed') as StravaError;
   }
   return data;
+}
+
+export interface UseStrava {
+  data: StravaPayload | null;
+  loading: boolean;
+  error: StravaError | null;
+  reload: () => void;
+}
+
+export function useStravaData(): UseStrava {
+  const [data, setData] = useState<StravaPayload | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<StravaError | null>(null);
+
+  const reload = useCallback(() => {
+    setLoading(true);
+    setError(null);
+    fetchStravaData()
+      .then(setData)
+      .catch((e: StravaError) => setError(e))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    reload();
+  }, [reload]);
+
+  return { data, loading, error, reload };
 }
