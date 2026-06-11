@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from 'react';
+import { Flag, MapPin, Trophy } from 'lucide-react';
 import { Race } from '../data/races';
 
 interface RaceCountdownProps {
   races: Race[];
 }
 
-const RaceCountdown: React.FC<RaceCountdownProps> = ({ races }) => {
-  const [timeLeft, setTimeLeft] = useState<{
-    days: number;
-    hours: number;
-    minutes: number;
-    seconds: number;
-  } | null>(null);
+// Accent color by how close the race is — used subtly (dot, digits, glow)
+// rather than a loud full-card gradient.
+function accentFor(daysLeft: number): { color: string; label: string } {
+  if (daysLeft === 0) return { color: '#f87171', label: 'Race day' };
+  if (daysLeft <= 7) return { color: '#fb923c', label: 'Final week' };
+  if (daysLeft <= 30) return { color: '#fbbf24', label: 'Closing in' };
+  if (daysLeft <= 90) return { color: '#22d3ee', label: 'On the horizon' };
+  return { color: '#34d399', label: 'Upcoming' };
+}
 
-  // Find the next upcoming race (today or later), earliest first.
+const Unit: React.FC<{ value: number; label: string; color: string; pad?: boolean }> = ({ value, label, color, pad = true }) => (
+  <div className="flex-1 glass-soft rounded-lg py-2.5 px-1 text-center border border-white/10">
+    <div className="text-2xl sm:text-3xl font-bold tabular-nums leading-none" style={{ color }}>
+      {pad ? String(value).padStart(2, '0') : value}
+    </div>
+    <div className="text-[10px] uppercase tracking-[0.15em] text-gray-400 mt-1.5">{label}</div>
+  </div>
+);
+
+const RaceCountdown: React.FC<RaceCountdownProps> = ({ races }) => {
+  const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -27,87 +41,75 @@ const RaceCountdown: React.FC<RaceCountdownProps> = ({ races }) => {
 
   useEffect(() => {
     if (!nextRace) return;
-
-    const updateCountdown = () => {
+    const update = () => {
       const now = new Date();
       const raceDate = new Date(nextRace.date);
-      raceDate.setHours(23, 59, 59, 999); // End of race day
-      const difference = raceDate.getTime() - now.getTime();
-
-      if (difference > 0) {
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-        setTimeLeft({ days, hours, minutes, seconds });
+      raceDate.setHours(23, 59, 59, 999);
+      const diff = raceDate.getTime() - now.getTime();
+      if (diff > 0) {
+        setTimeLeft({
+          days: Math.floor(diff / 86400000),
+          hours: Math.floor((diff % 86400000) / 3600000),
+          minutes: Math.floor((diff % 3600000) / 60000),
+          seconds: Math.floor((diff % 60000) / 1000),
+        });
       } else {
         setTimeLeft(null);
       }
     };
-
-    updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
-
+    update();
+    const interval = setInterval(update, 1000);
     return () => clearInterval(interval);
   }, [nextRace]);
 
-  const getEmoji = (daysLeft: number) => {
-    if (daysLeft === 0) return '🔥';
-    if (daysLeft <= 3) return '😰';
-    if (daysLeft <= 7) return '😬';
-    if (daysLeft <= 14) return '😅';
-    if (daysLeft <= 30) return '🤔';
-    if (daysLeft <= 60) return '😊';
-    if (daysLeft <= 90) return '😌';
-    return '😎';
-  };
-
-  const getBackgroundColor = (daysLeft: number) => {
-    if (daysLeft === 0) return 'from-red-600 to-orange-600';
-    if (daysLeft <= 3) return 'from-red-500 to-red-600';
-    if (daysLeft <= 7) return 'from-orange-500 to-red-500';
-    if (daysLeft <= 14) return 'from-yellow-500 to-orange-500';
-    if (daysLeft <= 30) return 'from-blue-500 to-purple-500';
-    return 'from-green-500 to-blue-500';
-  };
-
   if (!nextRace || !timeLeft) {
     return (
-      <div className="bg-gradient-to-r from-green-500 to-blue-500 rounded-lg p-4 shadow-lg border border-green-400">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">🏆</span>
-          <div>
-            <div className="text-white font-bold text-sm">No upcoming races</div>
-            <div className="text-green-100 text-xs">Add one below to start a countdown! 🎯</div>
-          </div>
+      <div className="glass-card rounded-xl p-5 border border-white/10 flex items-center gap-3">
+        <Trophy size={22} className="text-emerald-400" />
+        <div>
+          <div className="text-white font-semibold text-sm">No upcoming races</div>
+          <div className="text-gray-400 text-xs">Add one below to start a countdown 🎯</div>
         </div>
       </div>
     );
   }
 
-  const daysLeft = timeLeft.days;
-  const emoji = getEmoji(daysLeft);
-  const bgColor = getBackgroundColor(daysLeft);
+  const accent = accentFor(timeLeft.days);
+  const meta = [
+    new Date(nextRace.date).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
+    nextRace.type,
+    nextRace.distance,
+  ]
+    .filter(Boolean)
+    .join(' · ');
 
   return (
-    <div className={`bg-gradient-to-r ${bgColor} rounded-lg p-4 shadow-lg border border-opacity-30 border-white transform hover:scale-105 transition-all duration-300 animate-fade-in`}>
-      <div className="flex items-center gap-3">
-        <span className="text-2xl animate-bounce">{emoji}</span>
-        <div>
-          <div className="text-white font-bold text-sm leading-tight">{nextRace.name}</div>
-          <div className="text-white opacity-90 text-xs mb-1">
-            {daysLeft === 0 ? 'TODAY!' : `${daysLeft} day${daysLeft !== 1 ? 's' : ''} to go`}
+    <div
+      className="glass-card rounded-xl p-5 border border-white/10 animate-fade-in"
+      style={{ boxShadow: `0 10px 36px -12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08), 0 0 55px -22px ${accent.color}` }}
+    >
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-gray-400">
+            <span className="w-2 h-2 rounded-full" style={{ background: accent.color, boxShadow: `0 0 8px ${accent.color}` }} />
+            {accent.label}
           </div>
-          {daysLeft > 0 && (
-            <div className="text-white opacity-80 text-xs font-mono">
-              {timeLeft.days > 0 && `${timeLeft.days}d `}
-              {String(timeLeft.hours).padStart(2, '0')}:
-              {String(timeLeft.minutes).padStart(2, '0')}:
-              {String(timeLeft.seconds).padStart(2, '0')}
+          <h3 className="text-xl font-bold text-white mt-1.5 leading-tight truncate">{nextRace.name}</h3>
+          {meta && (
+            <div className="flex items-center gap-1.5 text-xs text-gray-400 mt-1">
+              {nextRace.location ? <MapPin size={12} /> : <Flag size={12} />}
+              <span className="truncate">{nextRace.location ? `${nextRace.location} · ${meta}` : meta}</span>
             </div>
           )}
         </div>
+        <Flag size={26} className="shrink-0" style={{ color: accent.color }} />
+      </div>
+
+      <div className="flex gap-2">
+        <Unit value={timeLeft.days} label="Days" color={accent.color} pad={false} />
+        <Unit value={timeLeft.hours} label="Hrs" color={accent.color} />
+        <Unit value={timeLeft.minutes} label="Min" color={accent.color} />
+        <Unit value={timeLeft.seconds} label="Sec" color={accent.color} />
       </div>
     </div>
   );
