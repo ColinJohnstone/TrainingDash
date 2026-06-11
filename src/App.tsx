@@ -3,12 +3,14 @@ import { Menu, X } from 'lucide-react';
 import Home from './components/Home';
 import TrainingPlanPage from './components/TrainingPlanPage';
 import ActivitiesPage from './components/ActivitiesPage';
+import StatsPage from './components/StatsPage';
 
-type Page = 'home' | 'plan' | 'activities';
+type Page = 'home' | 'plan' | 'activities' | 'stats';
 
 const NAV: { id: Page; label: string }[] = [
   { id: 'home', label: '🏠 Home' },
   { id: 'activities', label: '📊 Activities' },
+  { id: 'stats', label: '📈 Stats' },
   { id: 'plan', label: '📋 Training Plan' },
 ];
 
@@ -63,6 +65,7 @@ function App() {
         {currentPage === 'home' && <Home />}
         {currentPage === 'plan' && <TrainingPlanPage />}
         {currentPage === 'activities' && <ActivitiesPage />}
+        {currentPage === 'stats' && <StatsPage />}
       </div>
     </div>
   );
