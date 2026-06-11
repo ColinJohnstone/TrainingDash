@@ -18,8 +18,26 @@ export const config = { runtime: 'edge' };
 const METERS_PER_MILE = 1609.34;
 const METERS_PER_FOOT = 0.3048;
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
-// How many recent activities to pull (Strava max per page is 200).
+// Strava max per page is 200. Page through up to MAX_PAGES to pull full history
+// (bounded so a huge account can't blow past Strava's rate limit / our runtime).
 const PER_PAGE = 200;
+const MAX_PAGES = 12; // up to ~2,400 activities
+
+// Page through the activity list until a short page (the end) or the cap.
+async function fetchAllActivities(headers: HeadersInit): Promise<StravaApiActivity[]> {
+  const all: StravaApiActivity[] = [];
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    const res = await fetch(
+      `https://www.strava.com/api/v3/athlete/activities?per_page=${PER_PAGE}&page=${page}`,
+      { headers },
+    );
+    if (!res.ok) throw new Error(`Strava activities fetch failed (${res.status})`);
+    const batch = (await res.json()) as StravaApiActivity[];
+    all.push(...batch);
+    if (batch.length < PER_PAGE) break; // last page
+  }
+  return all;
+}
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -59,24 +77,16 @@ export default async function handler(req: Request): Promise<Response> {
     const accessToken = await getAccessToken();
     const headers = { Authorization: `Bearer ${accessToken}` };
 
-    // Athlete (needed for the all-time stats endpoint) + recent activity list.
-    const [athleteRes, activitiesRes] = await Promise.all([
-      fetch('https://www.strava.com/api/v3/athlete', { headers }),
-      fetch(`https://www.strava.com/api/v3/athlete/activities?per_page=${PER_PAGE}`, { headers }),
-    ]);
-
+    // Athlete (needed for the all-time stats endpoint) + full activity history.
+    const athleteRes = await fetch('https://www.strava.com/api/v3/athlete', { headers });
     if (!athleteRes.ok) throw new Error(`Strava athlete fetch failed (${athleteRes.status})`);
-    if (!activitiesRes.ok) throw new Error(`Strava activities fetch failed (${activitiesRes.status})`);
-
     const athlete = await athleteRes.json();
-    const raw = (await activitiesRes.json()) as StravaApiActivity[];
 
-    // All-time totals come from the dedicated stats endpoint (accurate, not
-    // limited to the recent activity list).
-    const statsRes = await fetch(
-      `https://www.strava.com/api/v3/athletes/${athlete.id}/stats`,
-      { headers },
-    );
+    // All-time totals (stats) and the paged activity list run concurrently.
+    const [statsRes, raw] = await Promise.all([
+      fetch(`https://www.strava.com/api/v3/athletes/${athlete.id}/stats`, { headers }),
+      fetchAllActivities(headers),
+    ]);
     if (!statsRes.ok) throw new Error(`Strava stats fetch failed (${statsRes.status})`);
     const athleteStats = await statsRes.json();
 
