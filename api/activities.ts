@@ -11,27 +11,15 @@
 // See STRAVA_SETUP.md for how to obtain these.
 
 import { isAuthed, unauthorized } from '../lib/auth';
+import { getAccessToken, normalizeSport, summarize, StravaApiActivity } from '../lib/strava';
 
 export const config = { runtime: 'edge' };
 
 const METERS_PER_MILE = 1609.34;
 const METERS_PER_FOOT = 0.3048;
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
-
-// Subset of the Strava activity fields we consume.
-interface StravaActivity {
-  id: number;
-  name: string;
-  type: string;
-  distance: number;
-  moving_time?: number;
-  elapsed_time?: number;
-  start_date: string;
-  start_date_local?: string;
-  total_elevation_gain?: number;
-  location_city?: string | null;
-  location_state?: string | null;
-}
+// How many recent activities to pull (Strava max per page is 200).
+const PER_PAGE = 200;
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -42,33 +30,6 @@ function json(body: unknown, status = 200): Response {
       'cache-control': 's-maxage=300, stale-while-revalidate=600',
     },
   });
-}
-
-// Exchange the long-lived refresh token for a short-lived access token.
-async function getAccessToken(): Promise<string> {
-  const res = await fetch('https://www.strava.com/oauth/token', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({
-      client_id: process.env.STRAVA_CLIENT_ID,
-      client_secret: process.env.STRAVA_CLIENT_SECRET,
-      grant_type: 'refresh_token',
-      refresh_token: process.env.STRAVA_REFRESH_TOKEN,
-    }),
-  });
-  if (!res.ok) {
-    throw new Error(`Strava token refresh failed (${res.status})`);
-  }
-  const data = await res.json();
-  return data.access_token as string;
-}
-
-// Collapse Strava's many activity subtypes into the three the UI knows about.
-function normalizeType(t: string): 'Run' | 'Ride' | 'Swim' | string {
-  if (t.includes('Run')) return 'Run';
-  if (t.includes('Ride')) return 'Ride';
-  if (t.includes('Swim')) return 'Swim';
-  return t;
 }
 
 function formatDuration(seconds: number): string {
@@ -101,17 +62,17 @@ export default async function handler(req: Request): Promise<Response> {
     // Athlete (needed for the all-time stats endpoint) + recent activity list.
     const [athleteRes, activitiesRes] = await Promise.all([
       fetch('https://www.strava.com/api/v3/athlete', { headers }),
-      fetch('https://www.strava.com/api/v3/athlete/activities?per_page=30', { headers }),
+      fetch(`https://www.strava.com/api/v3/athlete/activities?per_page=${PER_PAGE}`, { headers }),
     ]);
 
     if (!athleteRes.ok) throw new Error(`Strava athlete fetch failed (${athleteRes.status})`);
     if (!activitiesRes.ok) throw new Error(`Strava activities fetch failed (${activitiesRes.status})`);
 
     const athlete = await athleteRes.json();
-    const activities = (await activitiesRes.json()) as StravaActivity[];
+    const raw = (await activitiesRes.json()) as StravaApiActivity[];
 
     // All-time totals come from the dedicated stats endpoint (accurate, not
-    // limited to the last 30 activities).
+    // limited to the recent activity list).
     const statsRes = await fetch(
       `https://www.strava.com/api/v3/athletes/${athlete.id}/stats`,
       { headers },
@@ -123,32 +84,35 @@ export default async function handler(req: Request): Promise<Response> {
     const totalBike = (athleteStats.all_ride_totals?.distance ?? 0) / METERS_PER_MILE;
     const totalSwim = (athleteStats.all_swim_totals?.distance ?? 0) / METERS_PER_MILE;
 
+    // Full normalized list for the list/calendar/analytics views.
+    const activities = raw.map(summarize);
+
     // "This week" = rolling last 7 days, summed from the recent activity list.
     const cutoff = Date.now() - WEEK_MS;
     let thisWeekRun = 0;
     let thisWeekBike = 0;
     let thisWeekSwim = 0;
-    for (const a of activities) {
+    for (const a of raw) {
       if (new Date(a.start_date).getTime() < cutoff) continue;
       const miles = a.distance / METERS_PER_MILE;
-      const type = normalizeType(a.type);
-      if (type === 'Run') thisWeekRun += miles;
-      else if (type === 'Ride') thisWeekBike += miles;
-      else if (type === 'Swim') thisWeekSwim += miles;
+      const sport = normalizeSport(a.sport_type || a.type);
+      if (sport === 'Run') thisWeekRun += miles;
+      else if (sport === 'Ride') thisWeekBike += miles;
+      else if (sport === 'Swim') thisWeekSwim += miles;
     }
 
-    // Most recent activity (Strava returns newest first).
-    const a0 = activities[0];
+    // Most recent activity (Strava returns newest first) — kept for the Home card.
+    const a0 = raw[0];
     const lastWorkout = a0
       ? {
           id: String(a0.id),
           name: a0.name,
-          type: normalizeType(a0.type),
+          type: normalizeSport(a0.sport_type || a0.type),
           distance: a0.distance / METERS_PER_MILE,
           duration: formatDuration(a0.moving_time ?? a0.elapsed_time ?? 0),
           date: (a0.start_date_local ?? a0.start_date ?? '').split('T')[0],
-          pace: normalizeType(a0.type) === 'Run'
-            ? pacePerMile(a0.distance, a0.moving_time)
+          pace: normalizeSport(a0.sport_type || a0.type) === 'Run'
+            ? pacePerMile(a0.distance, a0.moving_time ?? 0)
             : undefined,
           elevation: Math.round((a0.total_elevation_gain ?? 0) / METERS_PER_FOOT),
           location: [a0.location_city, a0.location_state].filter(Boolean).join(', ') || undefined,
@@ -157,6 +121,7 @@ export default async function handler(req: Request): Promise<Response> {
 
     return json({
       lastWorkout,
+      activities,
       stats: {
         totalRun,
         totalBike,

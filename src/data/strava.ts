@@ -26,9 +26,50 @@ export interface StravaStatsData {
   lastUpdated: string;
 }
 
+export interface ActivitySummary {
+  id: string;
+  name: string;
+  sport: string;
+  rawType: string;
+  date: string; // local ISO timestamp
+  distanceMi: number;
+  movingTimeSec: number;
+  elapsedTimeSec: number;
+  elevationFt: number;
+  avgSpeedMph: number;
+  avgHeartrate?: number;
+  maxHeartrate?: number;
+  avgWatts?: number;
+  avgCadence?: number;
+  achievements?: number;
+  kudos?: number;
+  location?: string;
+  polyline?: string;
+}
+
+export interface ActivitySplit {
+  index: number;
+  distanceMi: number;
+  timeSec: number;
+  paceSecPerMi: number;
+  elevationFt?: number;
+  avgHeartrate?: number;
+}
+
+export interface ActivityDetail extends ActivitySummary {
+  description?: string;
+  calories?: number;
+  gear?: string;
+  deviceName?: string;
+  prCount?: number;
+  kilojoules?: number;
+  splits: ActivitySplit[];
+}
+
 export interface StravaPayload {
   lastWorkout: StravaWorkout | null;
   stats: StravaStatsData;
+  activities: ActivitySummary[];
 }
 
 export type StravaError = 'not_configured' | 'request_failed';
@@ -60,6 +101,16 @@ export async function fetchStravaData(): Promise<StravaPayload> {
     throw (data.error === 'not_configured' ? 'not_configured' : 'request_failed') as StravaError;
   }
   return data;
+}
+
+export async function fetchActivityDetail(id: string): Promise<ActivityDetail> {
+  const res = await fetch(`/api/activity?id=${encodeURIComponent(id)}`);
+  if (!res.ok) throw 'request_failed' as StravaError;
+  try {
+    return (await res.json()) as ActivityDetail;
+  } catch {
+    throw 'request_failed' as StravaError;
+  }
 }
 
 export interface UseStrava {

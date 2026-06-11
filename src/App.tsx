@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import Home from './components/Home';
 import TrainingPlanPage from './components/TrainingPlanPage';
-import StravaPage from './components/StravaPage';
+import ActivitiesPage from './components/ActivitiesPage';
 
-type Page = 'home' | 'plan' | 'strava';
+type Page = 'home' | 'plan' | 'activities';
 
 const NAV: { id: Page; label: string }[] = [
   { id: 'home', label: '🏠 Home' },
-  { id: 'strava', label: '📊 Strava Metrics' },
+  { id: 'activities', label: '📊 Activities' },
   { id: 'plan', label: '📋 Training Plan' },
 ];
 
@@ -62,7 +62,7 @@ function App() {
       <div className="p-4 pt-20 md:pt-4">
         {currentPage === 'home' && <Home />}
         {currentPage === 'plan' && <TrainingPlanPage />}
-        {currentPage === 'strava' && <StravaPage />}
+        {currentPage === 'activities' && <ActivitiesPage />}
       </div>
     </div>
   );
