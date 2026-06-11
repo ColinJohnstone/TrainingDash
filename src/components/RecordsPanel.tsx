@@ -35,7 +35,7 @@ function minBy(list: ActivitySummary[], fn: (a: ActivitySummary) => number): Act
 }
 
 const EddCard: React.FC<{ label: string; e: number; need: number }> = ({ label, e, need }) => (
-  <div className="bg-gray-900/40 rounded-lg p-3 border border-gray-700 text-center">
+  <div className="bg-gray-900/40 rounded-lg p-3 border border-white/10 text-center">
     <div className="text-xs text-gray-400 mb-1">{label} Eddington</div>
     <div className="text-3xl font-bold text-white">{e}</div>
     <div className="text-[11px] text-gray-500 mt-1">{need} more ≥{e + 1}mi to reach {e + 1}</div>
@@ -88,7 +88,7 @@ const RecordsPanel: React.FC<Props> = ({ activities, onSelect }) => {
   }, [activities]);
 
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-5 shadow-xl border border-gray-700">
+    <div className="glass-card rounded-xl p-5 shadow-xl border border-white/10">
       <h3 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
         <Trophy size={20} className="text-yellow-400" />
         Records
@@ -105,7 +105,7 @@ const RecordsPanel: React.FC<Props> = ({ activities, onSelect }) => {
           <button
             key={r.label}
             onClick={() => r.act && onSelect(r.act)}
-            className="text-left bg-gray-900/40 hover:bg-gray-900/70 rounded-lg p-3 border border-gray-700 hover:border-gray-600 transition flex items-center gap-3"
+            className="text-left bg-gray-900/40 hover:bg-gray-900/70 rounded-lg p-3 border border-white/10 hover:border-white/15 transition flex items-center gap-3"
           >
             <Award size={16} className="text-yellow-500/80 shrink-0" />
             <div className="min-w-0 flex-1">

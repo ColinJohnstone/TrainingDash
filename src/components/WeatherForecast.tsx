@@ -64,7 +64,7 @@ const WeatherForecast: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-600 mb-4">
+      <div className="bg-gray-800/50 rounded-lg p-3 border border-white/15 mb-4">
         <div className="flex items-center justify-center">
           <Thermometer size={16} className="text-blue-400 animate-pulse mr-2" />
           <span className="text-sm text-gray-300">Loading Aurora, ON weather...</span>
@@ -74,7 +74,7 @@ const WeatherForecast: React.FC = () => {
   }
 
   return (
-    <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-600 mb-4">
+    <div className="bg-gray-800/50 rounded-lg p-3 border border-white/15 mb-4">
       <div className="grid grid-cols-6 gap-2 text-center">
         {weatherData.map((hour, index) => (
           <div key={index} className="flex flex-col items-center">

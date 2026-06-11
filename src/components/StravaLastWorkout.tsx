@@ -36,7 +36,7 @@ const getActivityColor = (type: string) => {
 };
 
 const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-xl border border-gray-700 h-full">
+  <div className="glass-card rounded-xl p-6 shadow-xl border border-white/10 h-full">
     <div className="flex items-center gap-2 mb-4">
       <Activity size={24} className="text-orange-400" />
       <h3 className="text-xl font-bold text-white">Last Workout</h3>
@@ -98,7 +98,7 @@ const StravaLastWorkout: React.FC<Props> = ({ workout, loading }) => {
         </div>
 
         {workout.location && (
-          <div className="mt-3 pt-3 border-t border-gray-600">
+          <div className="mt-3 pt-3 border-t border-white/15">
             <div className="flex items-center gap-2 text-xs text-gray-400">
               <MapPin size={12} />
               <span>{workout.location}</span>

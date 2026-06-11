@@ -15,7 +15,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ date, variant, isNext, onClic
   const workout = trainingPlan[dateString];
   
   const getCardClasses = () => {
-    let baseClasses = "bg-gray-800 border border-gray-600 rounded-xl p-4 text-center shadow-xl transition-all duration-500 ease-out flex flex-col justify-center relative";
+    let baseClasses = "bg-gray-800 border border-white/15 rounded-xl p-4 text-center shadow-xl transition-all duration-500 ease-out flex flex-col justify-center relative";
 
     if (variant === 'adjacent') {
       baseClasses += " transform scale-85 opacity-60 cursor-pointer hover:opacity-90 hover:scale-95 hover:shadow-2xl h-64 overflow-hidden";
@@ -28,7 +28,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ date, variant, isNext, onClic
     } else if (!workout || workout.activity.toLowerCase().includes('rest') || workout.activity.toLowerCase().includes('recovery')) {
       baseClasses += " bg-gradient-to-br from-gray-700 to-gray-800";
     } else {
-      baseClasses += " bg-gradient-to-br from-gray-800 to-gray-900";
+      baseClasses += " glass-card";
     }
     
     return baseClasses;
@@ -85,7 +85,7 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ date, variant, isNext, onClic
               </button>
               {showDetails && (
                 <div
-                  className="text-left text-sm leading-relaxed text-gray-300 mt-4 bg-gray-900/50 rounded-lg p-4 border border-gray-600 animate-slide-down"
+                  className="text-left text-sm leading-relaxed text-gray-300 mt-4 bg-gray-900/50 rounded-lg p-4 border border-white/15 animate-slide-down"
                   dangerouslySetInnerHTML={formatDetails(workout.details)}
                 />
               )}

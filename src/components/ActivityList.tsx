@@ -21,7 +21,7 @@ const ActivityList: React.FC<Props> = ({ activities, onSelect }) => {
           <button
             key={a.id}
             onClick={() => onSelect(a)}
-            className="w-full text-left bg-gray-900/40 hover:bg-gray-900/70 rounded-lg p-4 border border-gray-700 hover:border-gray-600 transition-all duration-150 flex items-center gap-4"
+            className="w-full text-left bg-gray-900/40 hover:bg-gray-900/70 rounded-lg p-4 border border-white/10 hover:border-white/15 transition-all duration-150 flex items-center gap-4"
           >
             <span className="text-2xl shrink-0">{sportIcon(a.sport)}</span>
             <div className="min-w-0 flex-1">

@@ -107,7 +107,7 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onEdit, o
   const RaceCard = ({ race, isPast }: { race: Race; isPast: boolean }) => {
     const days = daysBetween(race.date);
     return (
-      <div className={`bg-gray-900/40 rounded-lg p-4 border border-gray-700 flex items-start justify-between gap-3 ${isPast ? 'opacity-60' : ''} ${editingId === race.id ? 'ring-1 ring-blue-500/60' : ''}`}>
+      <div className={`bg-gray-900/40 rounded-lg p-4 border border-white/10 flex items-start justify-between gap-3 ${isPast ? 'opacity-60' : ''} ${editingId === race.id ? 'ring-1 ring-blue-500/60' : ''}`}>
         <div className="min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h4 className="font-bold text-white truncate">{race.name}</h4>
@@ -155,7 +155,7 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onEdit, o
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-xl border border-gray-700">
+    <div className="glass-card rounded-xl p-6 shadow-xl border border-white/10">
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-xl font-bold text-white flex items-center gap-2">
           <Flag size={22} className="text-orange-400" />
@@ -189,7 +189,7 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onEdit, o
       )}
 
       {showForm && (
-        <form onSubmit={submit} className="mb-5 p-4 rounded-lg bg-gray-900/40 border border-gray-700 space-y-3">
+        <form onSubmit={submit} className="mb-5 p-4 rounded-lg bg-gray-900/40 border border-white/10 space-y-3">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-white">{editingId ? 'Edit race' : 'New race'}</p>
             {editingId && (
@@ -207,7 +207,7 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onEdit, o
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder="e.g. Boston Marathon"
-                className="mt-1 w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                className="mt-1 w-full bg-gray-800 border border-white/15 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
               />
             </label>
             <label className="text-sm text-gray-300">
@@ -217,7 +217,7 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onEdit, o
                 required
                 value={form.date}
                 onChange={(e) => setForm({ ...form, date: e.target.value })}
-                className="mt-1 w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                className="mt-1 w-full bg-gray-800 border border-white/15 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
               />
             </label>
             <label className="text-sm text-gray-300">
@@ -225,7 +225,7 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onEdit, o
               <select
                 value={form.type}
                 onChange={(e) => setForm({ ...form, type: e.target.value })}
-                className="mt-1 w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                className="mt-1 w-full bg-gray-800 border border-white/15 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
               >
                 {RACE_TYPES.map((t) => (
                   <option key={t} value={t}>{t}</option>
@@ -239,7 +239,7 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onEdit, o
                 value={form.distance}
                 onChange={(e) => setForm({ ...form, distance: e.target.value })}
                 placeholder="e.g. 70.3, 10K"
-                className="mt-1 w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                className="mt-1 w-full bg-gray-800 border border-white/15 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
               />
             </label>
             <label className="text-sm text-gray-300 sm:col-span-2">
@@ -249,7 +249,7 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onEdit, o
                 value={form.location}
                 onChange={(e) => setForm({ ...form, location: e.target.value })}
                 placeholder="e.g. Boston, MA"
-                className="mt-1 w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                className="mt-1 w-full bg-gray-800 border border-white/15 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
               />
             </label>
           </div>

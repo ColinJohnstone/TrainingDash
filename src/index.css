@@ -2,62 +2,112 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    background-color: #05070d;
+    color: #e5e7eb;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Sleek translucent scrollbars */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 9999px;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.28);
+  }
+  ::selection {
+    background: rgba(56, 189, 248, 0.35);
+  }
+}
+
+@layer components {
+  /* Liquid-glass panel: frosted, translucent, with an inner top highlight. */
+  .glass-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025));
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    box-shadow: 0 10px 36px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  /* Lighter glass for inner surfaces / inputs. */
+  .glass-soft {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+  }
+  /* Accent gradient text for headings. */
+  .text-gradient {
+    background: linear-gradient(90deg, #38bdf8, #818cf8 55%, #f472b6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
 @layer utilities {
+  /* Atmospheric background orbs */
+  .orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(90px);
+    opacity: 0.5;
+    will-change: transform;
+  }
+  .animate-float-a {
+    animation: float-a 22s ease-in-out infinite;
+  }
+  .animate-float-b {
+    animation: float-b 28s ease-in-out infinite;
+  }
+  .animate-float-c {
+    animation: float-c 25s ease-in-out infinite;
+  }
+
+  @keyframes float-a {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(60px, 40px) scale(1.1); }
+  }
+  @keyframes float-b {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-50px, 30px) scale(1.05); }
+  }
+  @keyframes float-c {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -50px) scale(1.12); }
+  }
+
   @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
-
   @keyframes slide-down {
-    from {
-      opacity: 0;
-      max-height: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      max-height: 1000px;
-      transform: translateY(0);
-    }
+    from { opacity: 0; max-height: 0; transform: translateY(-10px); }
+    to { opacity: 1; max-height: 1000px; transform: translateY(0); }
   }
-
   @keyframes pulse-ring {
-    0%, 100% {
-      box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
-    }
-    50% {
-      box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
-    }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+    50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
   }
-
-  .animate-fade-in {
-    animation: fade-in 0.5s ease-out;
-  }
-
-  .animate-slide-down {
-    animation: slide-down 0.4s ease-out;
-  }
-
-  .animate-pulse-ring {
-    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-
   @keyframes slide-in-left {
-    from {
-      transform: translateX(-100%);
-    }
-    to {
-      transform: translateX(0);
-    }
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
   }
 
-  .animate-slide-in-left {
-    animation: slide-in-left 0.3s ease-out;
-  }
+  .animate-fade-in { animation: fade-in 0.5s ease-out; }
+  .animate-slide-down { animation: slide-down 0.4s ease-out; }
+  .animate-pulse-ring { animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+  .animate-slide-in-left { animation: slide-in-left 0.3s ease-out; }
 }

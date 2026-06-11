@@ -90,7 +90,7 @@ const StatsContainer: React.FC<StatsContainerProps> = ({ currentDate }) => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-xl border border-gray-700 h-full flex flex-col justify-center space-y-6">
+    <div className="glass-card rounded-xl p-6 shadow-xl border border-white/10 h-full flex flex-col justify-center space-y-6">
       <div className="mb-6">
         <div className="flex items-center justify-between text-sm text-gray-300 mb-3">
           <div className="flex items-center gap-2">
@@ -110,7 +110,7 @@ const StatsContainer: React.FC<StatsContainerProps> = ({ currentDate }) => {
         </div>
       </div>
       
-      <div className="text-center bg-gray-900/50 rounded-lg p-4 border border-gray-600">
+      <div className="text-center bg-gray-900/50 rounded-lg p-4 border border-white/15">
         <div className="flex items-center justify-center gap-2 mb-2">
           {nextRace ? (
             <Trophy size={20} className="text-yellow-400" />
@@ -123,7 +123,7 @@ const StatsContainer: React.FC<StatsContainerProps> = ({ currentDate }) => {
         </div>
       </div>
 
-      <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-600">
+      <div className="bg-gray-900/50 rounded-lg p-4 border border-white/15">
         <div className="flex items-center justify-center gap-2 mb-3">
           <Activity size={18} className="text-blue-400" />
           <h3 className="text-sm font-semibold text-gray-300">Plan Distance Completed</h3>

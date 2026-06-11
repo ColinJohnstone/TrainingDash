@@ -30,7 +30,7 @@ const StatsPage: React.FC = () => {
       </div>
 
       {error && (
-        <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-xl border border-yellow-600/40 mb-4 flex items-start gap-3">
+        <div className="glass-card rounded-xl p-6 shadow-xl border border-yellow-600/40 mb-4 flex items-start gap-3">
           <AlertCircle size={22} className="text-yellow-400 mt-0.5 shrink-0" />
           <p className="text-sm text-gray-300">
             {error === 'not_configured'

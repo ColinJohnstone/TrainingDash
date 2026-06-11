@@ -71,7 +71,7 @@ const ActivityHeatmap: React.FC<Props> = ({ activities }) => {
     ['bg-gray-800', 'bg-emerald-900', 'bg-emerald-700', 'bg-emerald-500', 'bg-emerald-300'][lvl];
 
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-5 shadow-xl border border-gray-700">
+    <div className="glass-card rounded-xl p-5 shadow-xl border border-white/10">
       <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
         <h3 className="text-lg font-bold text-white flex items-center gap-2">
           <CalendarRange size={20} className="text-emerald-400" />
@@ -83,7 +83,7 @@ const ActivityHeatmap: React.FC<Props> = ({ activities }) => {
               key={y}
               onClick={() => setYear(y)}
               className={`text-xs px-2.5 py-1 rounded-md border transition ${
-                year === y ? 'bg-emerald-600 text-white border-emerald-500' : 'bg-gray-800 text-gray-300 border-gray-600 hover:bg-gray-700'
+                year === y ? 'bg-emerald-600 text-white border-emerald-500' : 'bg-gray-800 text-gray-300 border-white/15 hover:bg-gray-700'
               }`}
             >
               {y}
@@ -93,19 +93,19 @@ const ActivityHeatmap: React.FC<Props> = ({ activities }) => {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-        <div className="bg-gray-900/40 rounded-lg p-3 border border-gray-700">
+        <div className="bg-gray-900/40 rounded-lg p-3 border border-white/10">
           <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-1"><Flame size={12} className="text-orange-400" /> Current streak</div>
           <div className="text-xl font-bold text-white">{streaks.current} <span className="text-sm text-gray-400">days</span></div>
         </div>
-        <div className="bg-gray-900/40 rounded-lg p-3 border border-gray-700">
+        <div className="bg-gray-900/40 rounded-lg p-3 border border-white/10">
           <div className="text-xs text-gray-400 mb-1">Longest streak</div>
           <div className="text-xl font-bold text-white">{streaks.longest} <span className="text-sm text-gray-400">days</span></div>
         </div>
-        <div className="bg-gray-900/40 rounded-lg p-3 border border-gray-700">
+        <div className="bg-gray-900/40 rounded-lg p-3 border border-white/10">
           <div className="text-xs text-gray-400 mb-1">{year} active days</div>
           <div className="text-xl font-bold text-white">{activeDays}</div>
         </div>
-        <div className="bg-gray-900/40 rounded-lg p-3 border border-gray-700">
+        <div className="bg-gray-900/40 rounded-lg p-3 border border-white/10">
           <div className="text-xs text-gray-400 mb-1">{year} distance</div>
           <div className="text-xl font-bold text-white">{yearTotal.toFixed(0)} <span className="text-sm text-gray-400">mi</span></div>
         </div>

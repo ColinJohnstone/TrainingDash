@@ -19,7 +19,7 @@ const Home: React.FC = () => {
         <button
           onClick={reloadStrava}
           disabled={stravaLoading}
-          className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 text-gray-200 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 border border-gray-600 shrink-0"
+          className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 text-gray-200 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 border border-white/15 shrink-0"
         >
           <RefreshCw size={15} className={stravaLoading ? 'animate-spin' : ''} />
           Refresh

@@ -49,7 +49,7 @@ const ActivityCalendar: React.FC<Props> = ({ activities, onSelect }) => {
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={() => setCursor(new Date(year, month - 1, 1))}
-          className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 border border-gray-600 text-gray-300"
+          className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 border border-white/15 text-gray-300"
           aria-label="Previous month"
         >
           <ChevronLeft size={18} />
@@ -62,7 +62,7 @@ const ActivityCalendar: React.FC<Props> = ({ activities, onSelect }) => {
         </div>
         <button
           onClick={() => setCursor(new Date(year, month + 1, 1))}
-          className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 border border-gray-600 text-gray-300"
+          className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 border border-white/15 text-gray-300"
           aria-label="Next month"
         >
           <ChevronRight size={18} />
@@ -84,7 +84,7 @@ const ActivityCalendar: React.FC<Props> = ({ activities, onSelect }) => {
             <div
               key={i}
               className={`min-h-[72px] rounded-lg border p-1 ${
-                isToday ? 'border-blue-500/60 bg-blue-500/5' : 'border-gray-700/60 bg-gray-900/30'
+                isToday ? 'border-blue-500/60 bg-blue-500/5' : 'border-white/10 bg-gray-900/30'
               }`}
             >
               <div className={`text-[11px] mb-0.5 px-1 ${isToday ? 'text-blue-300 font-bold' : 'text-gray-500'}`}>

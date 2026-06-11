@@ -19,7 +19,7 @@ interface Props {
 }
 
 const Metric: React.FC<{ icon: React.ReactNode; label: string; value: string }> = ({ icon, label, value }) => (
-  <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700">
+  <div className="bg-gray-900/50 rounded-lg p-3 border border-white/10">
     <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-1">
       {icon}
       {label}
@@ -56,11 +56,11 @@ const ActivityDetailModal: React.FC<Props> = ({ activity, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-start sm:items-center justify-center p-4 overflow-y-auto" onClick={onClose}>
       <div
-        className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-2xl border border-gray-700 w-full max-w-2xl my-8"
+        className="glass-card rounded-xl shadow-2xl border border-white/10 w-full max-w-2xl my-8"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-start justify-between p-6 border-b border-gray-700">
+        <div className="flex items-start justify-between p-6 border-b border-white/10">
           <div className="flex items-start gap-3 min-w-0">
             <span className="text-3xl">{sportIcon(activity.sport)}</span>
             <div className="min-w-0">
@@ -108,7 +108,7 @@ const ActivityDetailModal: React.FC<Props> = ({ activity, onClose }) => {
           {polyline ? (
             <RouteMap polyline={polyline} color={color.hex} />
           ) : !loading ? (
-            <div className="flex items-center justify-center gap-2 h-20 rounded-lg bg-gray-900/40 border border-dashed border-gray-700 text-xs text-gray-500">
+            <div className="flex items-center justify-center gap-2 h-20 rounded-lg bg-gray-900/40 border border-dashed border-white/10 text-xs text-gray-500">
               <MapPin size={14} />
               No GPS route recorded (indoor / treadmill activity)
             </div>
@@ -116,7 +116,7 @@ const ActivityDetailModal: React.FC<Props> = ({ activity, onClose }) => {
 
           {/* Description */}
           {detail?.description && (
-            <p className="text-sm text-gray-300 whitespace-pre-wrap bg-gray-900/40 rounded-lg p-3 border border-gray-700">
+            <p className="text-sm text-gray-300 whitespace-pre-wrap bg-gray-900/40 rounded-lg p-3 border border-white/10">
               {detail.description}
             </p>
           )}
@@ -137,7 +137,7 @@ const ActivityDetailModal: React.FC<Props> = ({ activity, onClose }) => {
                   return (
                     <div key={s.index} className="flex items-center gap-3 text-sm">
                       <span className="w-6 text-gray-500 text-xs">{s.index}</span>
-                      <div className="flex-1 bg-gray-900/40 rounded h-6 relative overflow-hidden border border-gray-700">
+                      <div className="flex-1 bg-gray-900/40 rounded h-6 relative overflow-hidden border border-white/10">
                         <div className="absolute inset-y-0 left-0 bg-orange-500/30" style={{ width: `${pct}%` }} />
                         <div className="absolute inset-0 flex items-center justify-between px-2">
                           <span className="text-white font-medium">{formatPaceValue(s.paceSecPerMi)}/mi</span>

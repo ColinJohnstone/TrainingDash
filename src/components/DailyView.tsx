@@ -47,7 +47,7 @@ const DailyView: React.FC<DailyViewProps> = ({ currentDate, onChangeDay }) => {
       <div className="hidden md:flex items-center justify-center gap-4 mb-6">
         <button 
           onClick={() => onChangeDay(-1)}
-          className="p-3 bg-gray-800 hover:bg-gray-700 rounded-full transition-colors duration-200 border border-gray-600 hover:border-blue-500"
+          className="p-3 bg-gray-800 hover:bg-gray-700 rounded-full transition-colors duration-200 border border-white/15 hover:border-blue-500"
         >
           <ChevronLeft size={20} className="text-gray-300" />
         </button>
@@ -58,7 +58,7 @@ const DailyView: React.FC<DailyViewProps> = ({ currentDate, onChangeDay }) => {
         
         <button 
           onClick={() => onChangeDay(1)}
-          className="p-3 bg-gray-800 hover:bg-gray-700 rounded-full transition-colors duration-200 border border-gray-600 hover:border-blue-500"
+          className="p-3 bg-gray-800 hover:bg-gray-700 rounded-full transition-colors duration-200 border border-white/15 hover:border-blue-500"
         >
           <ChevronRight size={20} className="text-gray-300" />
         </button>

@@ -18,7 +18,7 @@ function weekStart(d: Date): Date {
 }
 
 const SummaryCard: React.FC<{ icon: React.ReactNode; label: string; value: string }> = ({ icon, label, value }) => (
-  <div className="bg-gray-900/40 rounded-lg p-4 border border-gray-700">
+  <div className="bg-gray-900/40 rounded-lg p-4 border border-white/10">
     <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-1">
       {icon}
       {label}
@@ -84,7 +84,7 @@ const ActivityAnalytics: React.FC<Props> = ({ activities }) => {
       </div>
 
       {/* Weekly volume chart */}
-      <div className="bg-gray-900/40 rounded-lg p-4 border border-gray-700">
+      <div className="bg-gray-900/40 rounded-lg p-4 border border-white/10">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-sm font-semibold text-white">Weekly volume (last {WEEKS} weeks)</h3>
           <div className="flex items-center gap-3 flex-wrap">
@@ -100,7 +100,7 @@ const ActivityAnalytics: React.FC<Props> = ({ activities }) => {
           {weeks.map((w, i) => (
             <div key={i} className="flex-1 flex flex-col items-center justify-end h-full group relative">
               <div
-                className="absolute -top-1 left-1/2 -translate-x-1/2 -translate-y-full opacity-0 group-hover:opacity-100 transition bg-gray-800 border border-gray-600 rounded px-2 py-1 text-[10px] text-white whitespace-nowrap z-10 pointer-events-none"
+                className="absolute -top-1 left-1/2 -translate-x-1/2 -translate-y-full opacity-0 group-hover:opacity-100 transition bg-gray-800 border border-white/15 rounded px-2 py-1 text-[10px] text-white whitespace-nowrap z-10 pointer-events-none"
               >
                 {w.start.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}: {w.total.toFixed(1)} mi
               </div>
@@ -122,7 +122,7 @@ const ActivityAnalytics: React.FC<Props> = ({ activities }) => {
 
       {/* Sport breakdown */}
       {breakdown.length > 0 && (
-        <div className="bg-gray-900/40 rounded-lg p-4 border border-gray-700">
+        <div className="bg-gray-900/40 rounded-lg p-4 border border-white/10">
           <h3 className="text-sm font-semibold text-white mb-3">By sport</h3>
           <div className="space-y-2">
             {breakdown.map(([sport, v]) => (

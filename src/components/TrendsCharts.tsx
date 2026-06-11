@@ -45,7 +45,7 @@ const TrendsCharts: React.FC<Props> = ({ activities }) => {
   const maxHour = Math.max(1, ...hours);
 
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-5 shadow-xl border border-gray-700 space-y-6">
+    <div className="glass-card rounded-xl p-5 shadow-xl border border-white/10 space-y-6">
       <h3 className="text-lg font-bold text-white flex items-center gap-2">
         <LineChart size={20} className="text-purple-400" />
         Trends
@@ -57,7 +57,7 @@ const TrendsCharts: React.FC<Props> = ({ activities }) => {
         <div className="flex items-end gap-1 h-36">
           {monthly.map((m, i) => (
             <div key={i} className="flex-1 flex flex-col items-center justify-end h-full group relative">
-              <div className="absolute -top-1 left-1/2 -translate-x-1/2 -translate-y-full opacity-0 group-hover:opacity-100 transition bg-gray-800 border border-gray-600 rounded px-2 py-1 text-[10px] text-white whitespace-nowrap z-10 pointer-events-none">
+              <div className="absolute -top-1 left-1/2 -translate-x-1/2 -translate-y-full opacity-0 group-hover:opacity-100 transition bg-gray-800 border border-white/15 rounded px-2 py-1 text-[10px] text-white whitespace-nowrap z-10 pointer-events-none">
                 {m.d.toLocaleDateString(undefined, { month: 'short', year: '2-digit' })}: {m.miles.toFixed(0)} mi
               </div>
               <div className="w-full bg-purple-500/70 rounded-t hover:bg-purple-400" style={{ height: `${(m.miles / maxMonth) * 100}%` }} />
@@ -90,7 +90,7 @@ const TrendsCharts: React.FC<Props> = ({ activities }) => {
           <div className="flex items-end gap-[2px] h-28">
             {hours.map((v, h) => (
               <div key={h} className="flex-1 flex flex-col items-center justify-end h-full group relative">
-                <div className="absolute -top-1 left-1/2 -translate-x-1/2 -translate-y-full opacity-0 group-hover:opacity-100 transition bg-gray-800 border border-gray-600 rounded px-2 py-1 text-[10px] text-white whitespace-nowrap z-10 pointer-events-none">
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 -translate-y-full opacity-0 group-hover:opacity-100 transition bg-gray-800 border border-white/15 rounded px-2 py-1 text-[10px] text-white whitespace-nowrap z-10 pointer-events-none">
                   {h}:00 — {v} act
                 </div>
                 <div className="w-full bg-emerald-500/70 rounded-t hover:bg-emerald-400" style={{ height: `${(v / maxHour) * 100}%` }} />

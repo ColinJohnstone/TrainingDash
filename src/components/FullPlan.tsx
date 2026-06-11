@@ -178,14 +178,14 @@ const FullPlan: React.FC<FullPlanProps> = ({ onDateSelect }) => {
   const monthName = currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-xl border border-gray-700">
+    <div className="glass-card rounded-xl p-6 shadow-xl border border-white/10">
       <div className="flex items-center justify-center gap-3 mb-6">
         <Calendar size={24} className="text-blue-400" />
         <h2 className="text-2xl font-bold text-white">Training Calendar</h2>
       </div>
       
       {/* Interactive Legend */}
-      <div className="mb-6 p-4 bg-gray-900/50 rounded-lg border border-gray-600">
+      <div className="mb-6 p-4 bg-gray-900/50 rounded-lg border border-white/15">
         <h3 className="text-sm font-semibold text-gray-300 mb-3">Filter by Sport (click to filter)</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
           <button
@@ -277,14 +277,14 @@ const FullPlan: React.FC<FullPlanProps> = ({ onDateSelect }) => {
       <div className="flex items-center justify-between mb-4">
         <button 
           onClick={() => navigateMonth(-1)}
-          className="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors duration-200 border border-gray-600"
+          className="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors duration-200 border border-white/15"
         >
           <ChevronLeft size={20} className="text-gray-300" />
         </button>
         <h3 className="text-xl font-bold text-white">{monthName}</h3>
         <button 
           onClick={() => navigateMonth(1)}
-          className="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors duration-200 border border-gray-600"
+          className="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors duration-200 border border-white/15"
         >
           <ChevronRight size={20} className="text-gray-300" />
         </button>
@@ -294,7 +294,7 @@ const FullPlan: React.FC<FullPlanProps> = ({ onDateSelect }) => {
       <div className="grid grid-cols-7 gap-1 mb-4">
         {/* Day headers */}
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-          <div key={day} className="p-2 text-center text-sm font-semibold text-gray-400 border-b border-gray-600">
+          <div key={day} className="p-2 text-center text-sm font-semibold text-gray-400 border-b border-white/15">
             {day}
           </div>
         ))}
@@ -309,7 +309,7 @@ const FullPlan: React.FC<FullPlanProps> = ({ onDateSelect }) => {
           return (
             <div 
               key={index} 
-              className={`min-h-[80px] p-1 border border-gray-700 ${
+              className={`min-h-[80px] p-1 border border-white/10 ${
                 date ? 'bg-gray-800/50' : 'bg-gray-900/30'
               } ${isToday ? 'ring-2 ring-blue-400' : ''} ${
                 shouldShow ? 'cursor-pointer hover:bg-gray-700/50 hover:shadow-lg hover:scale-105 transition-all duration-300' : ''

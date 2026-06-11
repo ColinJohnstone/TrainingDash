@@ -46,7 +46,7 @@ const RouteMap: React.FC<Props> = ({ polyline, color = '#fb923c', height = 180 }
   const ey = h - (offY + (end[0] - minLat) * scale);
 
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="w-full rounded-lg bg-gray-900/60 border border-gray-700" style={{ height }}>
+    <svg viewBox={`0 0 ${w} ${h}`} className="w-full rounded-lg bg-gray-900/60 border border-white/10" style={{ height }}>
       <path d={d} fill="none" stroke={color} strokeWidth={3} strokeLinejoin="round" strokeLinecap="round" />
       <circle cx={sx} cy={sy} r={5} fill="#22c55e" stroke="#0a0a0a" strokeWidth={1.5} />
       <circle cx={ex} cy={ey} r={5} fill="#ef4444" stroke="#0a0a0a" strokeWidth={1.5} />

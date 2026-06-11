@@ -25,7 +25,7 @@ const add = (agg: Agg, a: ActivitySummary) => {
 };
 
 const Row: React.FC<{ label: string; agg: Agg; bold?: boolean }> = ({ label, agg, bold }) => (
-  <tr className={`border-t border-gray-700/60 ${bold ? 'font-semibold text-white bg-gray-900/30' : 'text-gray-300'}`}>
+  <tr className={`border-t border-white/10 ${bold ? 'font-semibold text-white bg-gray-900/30' : 'text-gray-300'}`}>
     <td className="py-2 px-3">{label}</td>
     <td className="py-2 px-3 text-right">{agg.count || '—'}</td>
     <td className="py-2 px-3 text-right">{agg.miles ? agg.miles.toFixed(1) : '—'}</td>
@@ -77,7 +77,7 @@ const PeriodBreakdown: React.FC<Props> = ({ activities }) => {
   }, [activities, year]);
 
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-5 shadow-xl border border-gray-700">
+    <div className="glass-card rounded-xl p-5 shadow-xl border border-white/10">
       <h3 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
         <CalendarClock size={20} className="text-blue-400" />
         Breakdown
@@ -109,7 +109,7 @@ const PeriodBreakdown: React.FC<Props> = ({ activities }) => {
                   key={y}
                   onClick={() => setYear(y)}
                   className={`text-xs px-2 py-0.5 rounded border transition ${
-                    year === y ? 'bg-blue-600 text-white border-blue-500' : 'bg-gray-800 text-gray-300 border-gray-600 hover:bg-gray-700'
+                    year === y ? 'bg-blue-600 text-white border-blue-500' : 'bg-gray-800 text-gray-300 border-white/15 hover:bg-gray-700'
                   }`}
                 >
                   {y}

@@ -8,7 +8,7 @@ interface Props {
 }
 
 const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-xl border border-gray-700 h-full flex flex-col">
+  <div className="glass-card rounded-xl p-6 shadow-xl border border-white/10 h-full flex flex-col">
     <div className="flex items-center gap-2 mb-6">
       <TrendingUp size={24} className="text-blue-400" />
       <h3 className="text-xl font-bold text-white">Training Stats</h3>
@@ -91,7 +91,7 @@ const StravaStats: React.FC<Props> = ({ stats, loading }) => {
         />
       </div>
 
-      <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-600">
+      <div className="bg-gray-900/50 rounded-lg p-3 border border-white/15">
         <div className="flex items-center justify-center gap-2 text-center">
           <Target size={16} className="text-yellow-400" />
           <div>

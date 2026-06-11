@@ -55,7 +55,7 @@ const AuthGate: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 flex items-center justify-center p-4">
         <form
           onSubmit={submit}
-          className="w-full max-w-sm bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-8 shadow-xl border border-gray-700"
+          className="w-full max-w-sm glass-card rounded-xl p-8 shadow-xl border border-white/10"
         >
           <div className="flex flex-col items-center text-center mb-6">
             <div className="w-14 h-14 bg-blue-500/20 rounded-full flex items-center justify-center mb-3">
@@ -71,7 +71,7 @@ const AuthGate: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
-            className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500 mb-3"
+            className="w-full bg-gray-800 border border-white/15 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500 mb-3"
           />
 
           {error && <p className="text-sm text-red-400 mb-3 text-center">{error}</p>}

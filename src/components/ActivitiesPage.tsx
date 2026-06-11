@@ -40,7 +40,7 @@ const ActivitiesPage: React.FC = () => {
       </div>
 
       {error === 'not_configured' && (
-        <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-xl border border-yellow-600/40 mb-4 flex items-start gap-3">
+        <div className="glass-card rounded-xl p-6 shadow-xl border border-yellow-600/40 mb-4 flex items-start gap-3">
           <AlertCircle size={22} className="text-yellow-400 mt-0.5 shrink-0" />
           <p className="text-sm text-gray-300">
             Strava isn't connected. Set the Strava env vars (see{' '}
@@ -49,7 +49,7 @@ const ActivitiesPage: React.FC = () => {
         </div>
       )}
       {error === 'request_failed' && (
-        <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-xl border border-red-600/40 mb-4 flex items-start gap-3">
+        <div className="glass-card rounded-xl p-6 shadow-xl border border-red-600/40 mb-4 flex items-start gap-3">
           <AlertCircle size={22} className="text-red-400 mt-0.5 shrink-0" />
           <p className="text-sm text-gray-300">Couldn't load activities. Try Refresh.</p>
         </div>
@@ -66,7 +66,7 @@ const ActivitiesPage: React.FC = () => {
         <div className="space-y-6">
           <ActivityAnalytics activities={activities} />
 
-          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-5 shadow-xl border border-gray-700">
+          <div className="glass-card rounded-xl p-5 shadow-xl border border-white/10">
             {/* Controls */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
               <div className="flex items-center gap-1.5 flex-wrap">
@@ -77,14 +77,14 @@ const ActivitiesPage: React.FC = () => {
                     className={`text-xs px-3 py-1.5 rounded-full border transition ${
                       sport === s
                         ? 'bg-blue-600 text-white border-blue-500'
-                        : 'bg-gray-800 text-gray-300 border-gray-600 hover:bg-gray-700'
+                        : 'bg-gray-800 text-gray-300 border-white/15 hover:bg-gray-700'
                     }`}
                   >
                     {s === 'All' ? 'All' : `${sportIcon(s)} ${s}`}
                   </button>
                 ))}
               </div>
-              <div className="flex items-center bg-gray-800 rounded-lg border border-gray-600 p-0.5 shrink-0">
+              <div className="flex items-center bg-gray-800 rounded-lg border border-white/15 p-0.5 shrink-0">
                 <button
                   onClick={() => setView('list')}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition ${
