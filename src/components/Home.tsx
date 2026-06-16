@@ -6,6 +6,7 @@ import RacesManager from './RacesManager';
 import StravaStats from './StravaStats';
 import ActivityList from './ActivityList';
 import ActivityDetailModal from './ActivityDetailModal';
+import FunFact from './FunFact';
 import { useRaces } from '../data/races';
 import { useStravaData, ActivitySummary } from '../data/strava';
 import { formatDuration, formatDistance, sportIcon } from '../lib/activity';
@@ -108,6 +109,11 @@ const Home: React.FC = () => {
           value={`${allTime.toFixed(0)} mi`}
           sub="run + ride + swim"
         />
+      </div>
+
+      {/* Fun fact */}
+      <div className="mb-6">
+        <FunFact stats={data?.stats ?? null} />
       </div>
 
       {/* Recent activities + all-time breakdown */}
