@@ -94,6 +94,13 @@ export function formatPaceValue(secPerMile: number): string {
   return paceString(secPerMile);
 }
 
+// Parse a date-only string ("YYYY-MM-DD") as LOCAL midnight, not UTC — avoids
+// the off-by-one where new Date("2026-05-24") lands on the 23rd in US zones.
+export function parseLocalDate(dateStr: string): Date {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return new Date(y, (m || 1) - 1, d || 1);
+}
+
 export function formatDate(iso: string, opts?: Intl.DateTimeFormatOptions): string {
   return new Date(iso).toLocaleDateString(undefined, opts ?? { weekday: 'short', month: 'short', day: 'numeric' });
 }

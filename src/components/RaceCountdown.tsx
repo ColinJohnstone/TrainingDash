@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Flag, MapPin, Trophy } from 'lucide-react';
 import { Race } from '../data/races';
+import { parseLocalDate } from '../lib/activity';
 
 interface RaceCountdownProps {
   races: Race[];
@@ -34,7 +35,7 @@ const RaceCountdown: React.FC<RaceCountdownProps> = ({ races }) => {
   const nextRace = [...races]
     .sort((a, b) => a.date.localeCompare(b.date))
     .find((event) => {
-      const eventDate = new Date(event.date);
+      const eventDate = parseLocalDate(event.date);
       eventDate.setHours(0, 0, 0, 0);
       return eventDate >= today;
     });
@@ -43,7 +44,7 @@ const RaceCountdown: React.FC<RaceCountdownProps> = ({ races }) => {
     if (!nextRace) return;
     const update = () => {
       const now = new Date();
-      const raceDate = new Date(nextRace.date);
+      const raceDate = parseLocalDate(nextRace.date);
       raceDate.setHours(23, 59, 59, 999);
       const diff = raceDate.getTime() - now.getTime();
       if (diff > 0) {
@@ -76,7 +77,7 @@ const RaceCountdown: React.FC<RaceCountdownProps> = ({ races }) => {
 
   const accent = accentFor(timeLeft.days);
   const meta = [
-    new Date(nextRace.date).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
+    parseLocalDate(nextRace.date).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
     nextRace.type,
     nextRace.distance,
   ]

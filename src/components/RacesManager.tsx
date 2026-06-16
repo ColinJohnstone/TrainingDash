@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Trash2, Pencil, MapPin, Calendar, AlertCircle, X, Flag } from 'lucide-react';
 import { Race, RaceInput, RaceError } from '../data/races';
+import { parseLocalDate } from '../lib/activity';
 
 interface Props {
   races: Race[];
@@ -34,7 +35,7 @@ const typeColor = (type?: string) => {
 const daysBetween = (dateStr: string) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const d = new Date(dateStr);
+  const d = parseLocalDate(dateStr);
   d.setHours(0, 0, 0, 0);
   return Math.round((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 };
@@ -48,8 +49,8 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onEdit, o
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const sorted = [...races].sort((a, b) => a.date.localeCompare(b.date));
-  const upcoming = sorted.filter((r) => new Date(r.date) >= today);
-  const past = sorted.filter((r) => new Date(r.date) < today).reverse();
+  const upcoming = sorted.filter((r) => parseLocalDate(r.date) >= today);
+  const past = sorted.filter((r) => parseLocalDate(r.date) < today).reverse();
 
   const closeForm = () => {
     setShowForm(false);
@@ -119,7 +120,7 @@ const RacesManager: React.FC<Props> = ({ races, loading, error, onAdd, onEdit, o
           <div className="flex items-center gap-3 mt-1 text-xs text-gray-400 flex-wrap">
             <span className="flex items-center gap-1">
               <Calendar size={12} />
-              {new Date(race.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+              {parseLocalDate(race.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
             </span>
             {race.location && (
               <span className="flex items-center gap-1">
