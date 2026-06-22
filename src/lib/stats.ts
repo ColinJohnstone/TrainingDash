@@ -51,6 +51,12 @@ export function effortScore(a: ActivitySummary, maxHr: number): number {
   return Math.round(minutes * intensity * intensity * 1.5);
 }
 
+// Riegel race-time prediction: T2 = T1 * (D2/D1)^1.06.
+export function riegelPredict(knownTimeSec: number, knownMiles: number, targetMiles: number): number {
+  if (knownMiles <= 0 || knownTimeSec <= 0 || targetMiles <= 0) return 0;
+  return knownTimeSec * Math.pow(targetMiles / knownMiles, 1.06);
+}
+
 function localKeyFromParts(y: number, m: number, d: number): string {
   return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 }

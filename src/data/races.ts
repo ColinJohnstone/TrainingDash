@@ -10,6 +10,8 @@ export interface Race {
   type?: string;
   location?: string;
   distance?: string;
+  resultTime?: string; // e.g. "1:45:30" — recorded after the race
+  resultNotes?: string;
 }
 
 export type RaceInput = Omit<Race, 'id'>;

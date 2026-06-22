@@ -61,6 +61,20 @@ const Home: React.FC = () => {
     return { name: upcoming.name, days };
   }, [races]);
 
+  // Best recent run (fastest pace, >=3mi, last 120 days) → race-time prediction.
+  const fitnessRun = useMemo(() => {
+    const cutoff = Date.now() - 120 * 24 * 3600 * 1000;
+    const runs = activities.filter(
+      (a) => a.sport === 'Run' && a.distanceMi >= 3 && a.movingTimeSec > 0 && new Date(a.date).getTime() >= cutoff,
+    );
+    if (!runs.length) return null;
+    let best = runs[0];
+    for (const r of runs) {
+      if (r.movingTimeSec / r.distanceMi < best.movingTimeSec / best.distanceMi) best = r;
+    }
+    return { miles: best.distanceMi, timeSec: best.movingTimeSec };
+  }, [activities]);
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="flex items-center justify-between gap-4 mb-6">
@@ -146,6 +160,7 @@ const Home: React.FC = () => {
         onAdd={add}
         onEdit={edit}
         onDelete={remove}
+        fitnessRun={fitnessRun}
       />
 
       {selected && <ActivityDetailModal activity={selected} onClose={() => setSelected(null)} />}
