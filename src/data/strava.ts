@@ -2,7 +2,7 @@
 // Fetches from the /api/activities serverless function (which holds the
 // secrets). The browser never sees any Strava credentials.
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export interface StravaWorkout {
   id: string;
@@ -120,22 +120,57 @@ export interface UseStrava {
   reload: () => void;
 }
 
+// Persist the last successful payload so the app shows data instantly on load
+// (stale-while-revalidate) instead of forcing a manual refresh every visit.
+const CACHE_KEY = 'strava_cache_v2';
+const FRESH_MS = 10 * 60 * 1000; // re-fetch in the background if older than this
+
+interface CacheEntry {
+  data: StravaPayload;
+  ts: number;
+}
+
+function readCache(): CacheEntry | null {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    return raw ? (JSON.parse(raw) as CacheEntry) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeCache(data: StravaPayload): void {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
+  } catch {
+    // Quota exceeded / unavailable — caching is best-effort.
+  }
+}
+
 export function useStravaData(): UseStrava {
-  const [data, setData] = useState<StravaPayload | null>(null);
-  const [loading, setLoading] = useState(true);
+  const cached = useMemo(readCache, []);
+  const [data, setData] = useState<StravaPayload | null>(cached?.data ?? null);
+  const [loading, setLoading] = useState(!cached);
   const [error, setError] = useState<StravaError | null>(null);
 
   const reload = useCallback(() => {
     setLoading(true);
     setError(null);
     fetchStravaData()
-      .then(setData)
+      .then((d) => {
+        setData(d);
+        writeCache(d);
+      })
       .catch((e: StravaError) => setError(e))
       .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
-    reload();
+    const c = readCache();
+    // No cache → fetch (with spinner). Stale cache → revalidate in the
+    // background (data already shown). Fresh cache → do nothing.
+    if (!c) reload();
+    else if (Date.now() - c.ts > FRESH_MS) reload();
   }, [reload]);
 
   return { data, loading, error, reload };

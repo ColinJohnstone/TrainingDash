@@ -23,6 +23,34 @@ export function eddingtonNext(distancesMi: number[], e: number): number {
   return Math.max(0, target - have);
 }
 
+// Per-sport baseline intensity when no heart-rate data is available.
+function sportBaseIntensity(sport: string): number {
+  switch (sport) {
+    case 'Run': return 0.85;
+    case 'Ride': return 0.75;
+    case 'Swim': return 0.8;
+    case 'Workout': return 0.7;
+    case 'Hike': return 0.6;
+    case 'Walk': return 0.45;
+    default: return 0.6;
+  }
+}
+
+export function maxObservedHr(activities: ActivitySummary[]): number {
+  return activities.reduce((m, a) => Math.max(m, a.maxHeartrate ?? a.avgHeartrate ?? 0), 0);
+}
+
+// Estimated relative effort (Strava-style "suffer score" approximation):
+// minutes weighted by intensity². Intensity from HR when available, else a
+// per-sport baseline. Not a medical metric — a consistent relative number.
+export function effortScore(a: ActivitySummary, maxHr: number): number {
+  const minutes = a.movingTimeSec / 60;
+  const intensity = a.avgHeartrate && maxHr > 0
+    ? Math.min(1, Math.max(0.5, a.avgHeartrate / maxHr))
+    : sportBaseIntensity(a.sport);
+  return Math.round(minutes * intensity * intensity * 1.5);
+}
+
 function localKeyFromParts(y: number, m: number, d: number): string {
   return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 }

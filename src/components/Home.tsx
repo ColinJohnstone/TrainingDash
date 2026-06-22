@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { RefreshCw, Route, Flame, CalendarClock, Activity as ActivityIcon } from 'lucide-react';
+import { RefreshCw, Flame, CalendarClock, Activity as ActivityIcon } from 'lucide-react';
 import Header from './Header';
 import RaceCountdown from './RaceCountdown';
 import RacesManager from './RacesManager';
@@ -7,12 +7,12 @@ import StravaStats from './StravaStats';
 import ActivityList from './ActivityList';
 import ActivityDetailModal from './ActivityDetailModal';
 import FunFact from './FunFact';
+import WeeklyGoal from './WeeklyGoal';
+import WeeklySummary from './WeeklySummary';
 import { useRaces } from '../data/races';
 import { useStravaData, ActivitySummary } from '../data/strava';
-import { formatDuration, formatDistance, sportIcon } from '../lib/activity';
+import { formatDistance, sportIcon } from '../lib/activity';
 import { computeDayStreaks } from '../lib/stats';
-
-const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
 const Kpi: React.FC<{
   icon: React.ReactNode;
@@ -43,25 +43,11 @@ const Home: React.FC = () => {
   const [selected, setSelected] = useState<ActivitySummary | null>(null);
 
   const activities = useMemo(() => data?.activities ?? [], [data]);
-
-  const week = useMemo(() => {
-    const cutoff = Date.now() - WEEK_MS;
-    let miles = 0;
-    let count = 0;
-    let timeSec = 0;
-    for (const a of activities) {
-      if (new Date(a.date).getTime() < cutoff) continue;
-      miles += a.distanceMi;
-      timeSec += a.movingTimeSec;
-      count += 1;
-    }
-    return { miles, count, timeSec };
-  }, [activities]);
-
   const streaks = useMemo(() => computeDayStreaks(activities), [activities]);
   const allTime = data ? data.stats.totalRun + data.stats.totalBike + data.stats.totalSwim : 0;
   const last = activities[0] ?? null;
   const recent = useMemo(() => activities.slice(0, 5), [activities]);
+  const initialLoading = stravaLoading && !data;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -82,14 +68,14 @@ const Home: React.FC = () => {
         <RaceCountdown races={races} />
       </div>
 
-      {/* This-week KPIs */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <Kpi
-          icon={<Route size={12} className="text-cyan-400" />}
-          label="This week"
-          value={`${week.miles.toFixed(1)} mi`}
-          sub={`${week.count} activit${week.count === 1 ? 'y' : 'ies'} · ${formatDuration(week.timeSec)}`}
-        />
+      {/* Weekly goal + this-week vs last-week */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+        <WeeklyGoal activities={activities} />
+        <WeeklySummary activities={activities} />
+      </div>
+
+      {/* Quick KPIs */}
+      <div className="grid grid-cols-3 gap-3 mb-6">
         <Kpi
           icon={<Flame size={12} className="text-orange-400" />}
           label="Current streak"
@@ -123,7 +109,7 @@ const Home: React.FC = () => {
             <ActivityIcon size={18} className="text-cyan-400" />
             Recent activities
           </h3>
-          {stravaLoading && !data ? (
+          {initialLoading ? (
             <div className="flex items-center justify-center py-8">
               <div className="w-6 h-6 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
             </div>
@@ -133,7 +119,7 @@ const Home: React.FC = () => {
             <p className="text-sm text-gray-500 text-center py-8">No activities yet.</p>
           )}
         </div>
-        <StravaStats stats={data?.stats ?? null} loading={stravaLoading} />
+        <StravaStats stats={data?.stats ?? null} loading={initialLoading} />
       </div>
 
       <RacesManager

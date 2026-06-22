@@ -5,6 +5,7 @@ import ActivityHeatmap from './ActivityHeatmap';
 import RecordsPanel from './RecordsPanel';
 import PeriodBreakdown from './PeriodBreakdown';
 import TrendsCharts from './TrendsCharts';
+import TrainingLoad from './TrainingLoad';
 import ActivityDetailModal from './ActivityDetailModal';
 
 const StatsPage: React.FC = () => {
@@ -50,6 +51,7 @@ const StatsPage: React.FC = () => {
       ) : activities.length > 0 ? (
         <div className="space-y-6">
           <ActivityHeatmap activities={activities} />
+          <TrainingLoad activities={activities} />
           <RecordsPanel activities={activities} onSelect={setSelected} />
           <PeriodBreakdown activities={activities} />
           <TrendsCharts activities={activities} />
