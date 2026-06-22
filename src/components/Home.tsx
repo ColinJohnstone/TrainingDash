@@ -9,9 +9,10 @@ import ActivityDetailModal from './ActivityDetailModal';
 import FunFact from './FunFact';
 import WeeklyGoal from './WeeklyGoal';
 import WeeklySummary from './WeeklySummary';
+import WorkoutSummary from './WorkoutSummary';
 import { useRaces } from '../data/races';
 import { useStravaData, ActivitySummary } from '../data/strava';
-import { formatDistance, sportIcon } from '../lib/activity';
+import { formatDistance, sportIcon, parseLocalDate } from '../lib/activity';
 import { computeDayStreaks } from '../lib/stats';
 
 const Kpi: React.FC<{
@@ -48,6 +49,17 @@ const Home: React.FC = () => {
   const last = activities[0] ?? null;
   const recent = useMemo(() => activities.slice(0, 5), [activities]);
   const initialLoading = stravaLoading && !data;
+
+  const nextRace = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const upcoming = [...races]
+      .sort((a, b) => a.date.localeCompare(b.date))
+      .find((r) => parseLocalDate(r.date) >= today);
+    if (!upcoming) return null;
+    const days = Math.round((parseLocalDate(upcoming.date).getTime() - today.getTime()) / 86400000);
+    return { name: upcoming.name, days };
+  }, [races]);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -95,6 +107,11 @@ const Home: React.FC = () => {
           value={`${allTime.toFixed(0)} mi`}
           sub="run + ride + swim"
         />
+      </div>
+
+      {/* AI coach summary */}
+      <div className="mb-4">
+        <WorkoutSummary stats={data?.stats ?? null} activities={activities} nextRace={nextRace} />
       </div>
 
       {/* Fun fact */}
